@@ -92,6 +92,10 @@ class StacklyLoader extends HTMLElement {
           justify-content: center;
           margin-bottom: 0.5rem;
           animation: logoPulse 2s infinite ease-in-out;
+          border-radius: 50%;
+          background: var(--bg-surface);
+          border: 1px solid var(--border-color);
+          box-shadow: var(--card-shadow);
         }
         .loader-logo-ring {
           position: absolute;
@@ -270,8 +274,8 @@ class StacklyLoader extends HTMLElement {
         <div class="loader-content">
           <div class="loader-logo-wrap">
             <div class="loader-logo-ring"></div>
-            <div style="position: relative; z-index: 2; display: flex; align-items: center; justify-content: center;">
-              ${STACKLY_LOGO_SVG(68)}
+            <div style="position: relative; z-index: 2; display: flex; align-items: center; justify-content: center; transform: translate(4px, -1px);">
+              ${STACKLY_LOGO_SVG(84)}
             </div>
           </div>
           <h1 class="loader-title">Stack<span>ly</span></h1>
