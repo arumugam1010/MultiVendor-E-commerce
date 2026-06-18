@@ -208,8 +208,9 @@
     }
     .product-footer {
       display: flex;
-      justify-content: space-between;
-      align-items: center;
+      flex-direction: column;
+      align-items: stretch;
+      gap: 0.5rem;
       margin-top: auto;
       padding-top: 0.5rem;
     }
@@ -870,6 +871,23 @@
 
       updateCounts();
 
+      // Ensure mock orders exist for the current user
+      if (currentUser) {
+        let allOrders = db.getOrders();
+        const userOrders = allOrders.filter(o => o.customer.toLowerCase() === currentUser.username.toLowerCase());
+        if (userOrders.length === 0) {
+          const userDummyOrders = [
+            { id: 'STK-9011', customer: currentUser.username, date: 'Jun 18, 2026', total: 1198.00, status: 'Paid', items: '2x StackPhone' },
+            { id: 'STK-9012', customer: currentUser.username, date: 'Jun 17, 2026', total: 249.00, status: 'Paid', items: '1x Pulse Watch' },
+            { id: 'STK-9013', customer: currentUser.username, date: 'Jun 15, 2026', total: 129.00, status: 'Pending', items: '1x Gravity Shoes' },
+            { id: 'STK-9014', customer: currentUser.username, date: 'Jun 14, 2026', total: 199.00, status: 'Paid', items: '1x Cosmic ANC' },
+            { id: 'STK-9015', customer: currentUser.username, date: 'Jun 12, 2026', total: 249.00, status: 'Cancelled', items: '1x Pulse Watch' }
+          ];
+          allOrders = [...userDummyOrders, ...allOrders];
+          db.saveOrders(allOrders);
+        }
+      }
+
       // Populate recent orders
       const orders = db.getOrders().filter(o => !currentUser || o.customer.toLowerCase() === currentUser.username.toLowerCase() || currentUser.username.toLowerCase() === 'alex mercer');
       document.getElementById('stat-orders-count').innerText = orders.length;
@@ -1122,7 +1140,8 @@
                   $${p.discount > 0 ? discountAmt.toFixed(2) : p.price.toFixed(2)}
                   ${p.discount > 0 ? `<del>$${p.price.toFixed(2)}</del>` : ''}
                 </div>
-                <button class="btn btn-primary" onclick="event.stopPropagation(); moveToCart('${p.id}')" style="padding: 0.5rem 1rem; font-size: 0.85rem;">
+                <button class="btn btn-primary" onclick="event.stopPropagation(); moveToCart('${p.id}')" style="width: 100%; border-radius: 8px; margin-top: 0.5rem; display: flex; align-items: center; justify-content: center; gap: 0.5rem; padding: 0.6rem 1rem; font-size: 0.85rem;">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><path stroke-linecap="round" stroke-linejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
                   Add to Cart
                 </button>
               </div>

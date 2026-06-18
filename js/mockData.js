@@ -258,11 +258,11 @@ const INITIAL_USERS = [
 ];
 
 const MOCK_ORDERS = [
-  { id: 'STK-9402', customer: 'Sarah Connor', date: 'Jun 17, 2026', total: 1198.00, status: 'Paid', items: '2x StackPhone' },
-  { id: 'STK-8501', customer: 'Bruce Wayne', date: 'Jun 16, 2026', total: 1499.00, status: 'Paid', items: '1x AetherBook' },
-  { id: 'STK-7294', customer: 'Peter Parker', date: 'Jun 15, 2026', total: 129.00, status: 'Pending', items: '1x Gravity Shoes' },
-  { id: 'STK-6102', customer: 'Clark Kent', date: 'Jun 14, 2026', total: 199.00, status: 'Paid', items: '1x Cosmic ANC' },
-  { id: 'STK-5049', customer: 'Selina Kyle', date: 'Jun 12, 2026', total: 249.00, status: 'Cancelled', items: '1x Pulse Watch' }
+  { id: 'STK-9402', customer: 'Alex Mercer', date: 'Jun 17, 2026', total: 1198.00, status: 'Paid', items: '2x StackPhone' },
+  { id: 'STK-8501', customer: 'Alex Mercer', date: 'Jun 16, 2026', total: 1499.00, status: 'Paid', items: '1x AetherBook' },
+  { id: 'STK-7294', customer: 'Alex Mercer', date: 'Jun 15, 2026', total: 129.00, status: 'Pending', items: '1x Gravity Shoes' },
+  { id: 'STK-6102', customer: 'Alex Mercer', date: 'Jun 14, 2026', total: 199.00, status: 'Paid', items: '1x Cosmic ANC' },
+  { id: 'STK-5049', customer: 'Alex Mercer', date: 'Jun 12, 2026', total: 249.00, status: 'Cancelled', items: '1x Pulse Watch' }
 ];
 
 const MOCK_NOTIFICATIONS = [
@@ -279,7 +279,7 @@ const MOCK_REVIEWS = [
 
 // Helper to seed localStorage databases if they do not exist yet or are outdated
 function seedDatabase() {
-  const currentSeedVersion = '8'; // Force refresh seed databases
+  const currentSeedVersion = '10'; // Force refresh seed databases
   const seededVersion = localStorage.getItem('stackly_seed_version');
   
   if (seededVersion !== currentSeedVersion) {
@@ -311,6 +311,24 @@ function seedDatabase() {
   }
   if (!localStorage.getItem('stackly_reviews')) {
     localStorage.setItem('stackly_reviews', JSON.stringify(MOCK_REVIEWS));
+  }
+  if (!localStorage.getItem('stackly_wishlist')) {
+    const defaultWishlist = [
+      PRODUCTS[0], // StackPhone 14 Pro Neon
+      PRODUCTS[2], // Stellar Pulse Chronograph
+      PRODUCTS[4], // Aura Zero Gravity Sneakers
+      PRODUCTS[9]  // NeonPulse RGB Mechanical Keyboard
+    ];
+    localStorage.setItem('stackly_wishlist', JSON.stringify(defaultWishlist));
+  }
+  if (!localStorage.getItem('stackly_cart')) {
+    const defaultCart = [
+      { ...PRODUCTS[1], quantity: 1 },  // AetherBook Carbon Pro
+      { ...PRODUCTS[3], quantity: 1 },  // Cosmic Sound ANC Headphones
+      { ...PRODUCTS[7], quantity: 1 },  // Nebula Ergonomic Pod Chair
+      { ...PRODUCTS[10], quantity: 1 }  // Astra Leather Cyber Backpack
+    ];
+    localStorage.setItem('stackly_cart', JSON.stringify(defaultCart));
   }
 }
 

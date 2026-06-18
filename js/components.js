@@ -48,6 +48,14 @@ function getPagesPath() {
 // // 1. Stackly Logo Loader Component (3 seconds countdown)
 class StacklyLoader extends HTMLElement {
   connectedCallback() {
+    // Skip loader overlay entirely on all dashboard pages to make transition snappy
+    const path = window.location.pathname;
+    if (path.includes('customer-dashboard.html') || path.includes('vendor-dashboard.html') || path.includes('admin-dashboard.html')) {
+      this.innerHTML = '';
+      this.remove();
+      return;
+    }
+
     // Prevent scrolling while loading
     document.body.style.overflow = 'hidden';
 
@@ -506,7 +514,7 @@ class StacklyHeader extends HTMLElement {
         .navbar-actions {
           display: flex;
           align-items: center;
-          gap: 1.25rem;
+          gap: 0.65rem;
         }
         .badge-count {
           position: absolute;
@@ -669,13 +677,11 @@ class StacklyHeader extends HTMLElement {
             <!-- Wishlist -->
             <a href="${base}${pages}404.html" class="topbar-action-btn" title="Wishlist">
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" style="width: 20px; height: 20px;"><path stroke-linecap="round" stroke-linejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
-              ${wishlistCount > 0 ? `<div class="badge-count">${wishlistCount}</div>` : ''}
             </a>
 
             <!-- Cart -->
             <a href="${base}${pages}404.html" class="topbar-action-btn" title="Cart">
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" style="width: 20px; height: 20px;"><path stroke-linecap="round" stroke-linejoin="round" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/></svg>
-              ${cartCount > 0 ? `<div class="badge-count">${cartCount}</div>` : ''}
             </a>
 
             <!-- Auth profile menu / Login -->
@@ -762,34 +768,7 @@ class StacklyHeader extends HTMLElement {
   }
 
   refreshCounters() {
-    const cart = JSON.parse(localStorage.getItem('stackly_cart')) || [];
-    const wishlist = JSON.parse(localStorage.getItem('stackly_wishlist')) || [];
-    const cartCount = cart.reduce((acc, item) => acc + item.quantity, 0);
-    const wishlistCount = wishlist.length;
-
-    // We can easily reconnectedCallback or just update badges in the DOM
-    const cartBtn = this.querySelector('a[href*="?tab=cart"]');
-    const wishlistBtn = this.querySelector('a[href*="?tab=wishlist"]');
-
-    if (cartBtn) {
-      let badge = cartBtn.querySelector('.badge-count');
-      if (cartCount > 0) {
-        if (badge) badge.innerText = cartCount;
-        else cartBtn.insertAdjacentHTML('beforeend', `<div class="badge-count">${cartCount}</div>`);
-      } else if (badge) {
-        badge.remove();
-      }
-    }
-
-    if (wishlistBtn) {
-      let badge = wishlistBtn.querySelector('.badge-count');
-      if (wishlistCount > 0) {
-        if (badge) badge.innerText = wishlistCount;
-        else wishlistBtn.insertAdjacentHTML('beforeend', `<div class="badge-count">${wishlistCount}</div>`);
-      } else if (badge) {
-        badge.remove();
-      }
-    }
+    // Badges are disabled as per design requirements
   }
 }
 customElements.define('stackly-header', StacklyHeader);
