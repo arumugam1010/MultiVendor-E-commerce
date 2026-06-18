@@ -30,7 +30,7 @@ const StacklyAuth = {
   },
 
   // Validate credentials and login user
-  login: (email, password) => {
+  login: (email, password, role = null) => {
     const users = JSON.parse(localStorage.getItem('stackly_users')) || [];
     
     // Find by email case-insensitively, ignoring password for ultimate testing ease
@@ -38,12 +38,14 @@ const StacklyAuth = {
 
     if (!user) {
       // Generate dynamically for testing bypass
-      const emailLower = email.toLowerCase();
-      let role = 'customer';
-      if (emailLower.includes('admin')) {
-        role = 'admin';
-      } else if (emailLower.includes('vendor') || emailLower.includes('seller')) {
-        role = 'vendor';
+      let assignedRole = role || 'customer';
+      if (!role) {
+        const emailLower = email.toLowerCase();
+        if (emailLower.includes('admin')) {
+          assignedRole = 'admin';
+        } else if (emailLower.includes('vendor') || emailLower.includes('seller')) {
+          assignedRole = 'vendor';
+        }
       }
 
       const prefix = email.split('@')[0] || 'User';
@@ -52,9 +54,15 @@ const StacklyAuth = {
         .map(word => word.charAt(0).toUpperCase() + word.slice(1))
         .join(' ');
 
-      user = { username, email, password, role };
+      user = { username, email, password, role: assignedRole };
       users.push(user);
       localStorage.setItem('stackly_users', JSON.stringify(users));
+    } else {
+      // If user exists and a role is explicitly selected at login, update it
+      if (role && user.role !== role) {
+        user.role = role;
+        localStorage.setItem('stackly_users', JSON.stringify(users));
+      }
     }
 
     // Set active session

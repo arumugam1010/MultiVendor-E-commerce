@@ -92,6 +92,55 @@
     .auth-footer-links a:hover {
       color: var(--secondary);
     }
+    
+    /* Role Selector Styles */
+    .role-selector-container {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.75rem;
+      margin-bottom: 1.25rem;
+    }
+    .role-btn {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      padding: 0.75rem 0.5rem;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: all var(--transition-normal);
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+    .role-btn:hover {
+      background: rgba(255, 255, 255, 0.06);
+      border-color: var(--border-hover);
+      color: var(--text-primary);
+      transform: translateY(-2px);
+    }
+    .role-btn.active {
+      background: var(--primary-gradient);
+      border-color: transparent;
+      color: #ffffff !important;
+      box-shadow: 0 4px 15px var(--primary-glow);
+    }
+    .role-btn.active .role-icon {
+      stroke: #ffffff;
+      filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.5));
+    }
+    .role-icon {
+      width: 20px;
+      height: 20px;
+      stroke: currentColor;
+      transition: transform var(--transition-fast);
+    }
+    .role-btn:hover .role-icon {
+      transform: scale(1.1);
+    }
   </style>
 </head>
 <body>
@@ -111,6 +160,34 @@
       </div>
 
       <form id="loginForm">
+        <div class="form-group">
+          <label class="form-label">Access Identity Role</label>
+          <div class="role-selector-container">
+            <button type="button" class="role-btn active" data-role="customer">
+              <svg class="role-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                <circle cx="12" cy="7" r="4"></circle>
+              </svg>
+              <span>Customer</span>
+            </button>
+            <button type="button" class="role-btn" data-role="vendor">
+              <svg class="role-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                <polyline points="9 22 9 12 15 12 15 22"></polyline>
+              </svg>
+              <span>Vendor</span>
+            </button>
+            <button type="button" class="role-btn" data-role="admin">
+              <svg class="role-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+              </svg>
+              <span>Admin</span>
+            </button>
+          </div>
+          <input type="hidden" id="selectedRole" value="customer">
+        </div>
+
         <div class="form-group">
           <label class="form-label" for="email">Security Decryption Key (Email)</label>
           <div class="input-wrapper">
@@ -143,13 +220,26 @@
   <script src="../js/auth.js"></script>
   <script src="../js/dashboard.js"></script>
   <script>
+    // Role selection interaction
+    const roleBtns = document.querySelectorAll('.role-btn');
+    const selectedRoleInput = document.getElementById('selectedRole');
+    
+    roleBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        roleBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        selectedRoleInput.value = btn.dataset.role;
+      });
+    });
+
     // Login Form Submit Handling
     document.getElementById('loginForm').addEventListener('submit', (e) => {
       e.preventDefault();
       const email = document.getElementById('email').value.trim();
       const password = document.getElementById('password').value;
+      const role = selectedRoleInput.value;
 
-      const result = StacklyAuth.login(email, password);
+      const result = StacklyAuth.login(email, password, role);
 
       if (result.success) {
         // Successful login, route to dashboard
