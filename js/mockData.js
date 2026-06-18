@@ -181,7 +181,7 @@ const PRODUCTS = [
     rating: 4.8,
     reviewsCount: 76,
     category: 'home',
-    image: 'assets/home_espresso.jpg',
+    image: 'assets/home_espresso.webp',
     vendor: 'Stellar Living Co.',
     description: 'A premium modern stainless steel espresso maker for perfect morning brews, styled beautifully for futuristic kitchens.',
     featured: true,
@@ -196,7 +196,7 @@ const PRODUCTS = [
     rating: 4.9,
     reviewsCount: 112,
     category: 'electronics',
-    image: 'assets/elec_keyboard.jpg',
+    image: 'assets/elec_keyboard.webp',
     vendor: 'NovaTech Enterprises',
     description: 'An ergonomic mechanical gaming keyboard featuring clicky tactile switches and glowing multi-zone RGB LED lighting patterns.',
     featured: true,
@@ -211,7 +211,7 @@ const PRODUCTS = [
     rating: 4.7,
     reviewsCount: 43,
     category: 'fashion',
-    image: 'assets/fashion_backpack.jpg',
+    image: 'assets/fashion_backpack.webp',
     vendor: 'Aura Fashion House',
     description: 'Minimalist black top-grain leather backpack built with waterproof zippers and a padded 16-inch laptop pocket.',
     featured: true,
@@ -226,7 +226,7 @@ const PRODUCTS = [
     rating: 4.8,
     reviewsCount: 95,
     category: 'electronics',
-    image: 'assets/elec_earbuds.jpg',
+    image: 'assets/elec_earbuds.webp',
     vendor: 'NovaTech Enterprises',
     description: 'True wireless stereo earbuds with active background noise-cancelling (ANC) audio and compact matte charging case.',
     featured: true,
@@ -279,7 +279,7 @@ const MOCK_REVIEWS = [
 
 // Helper to seed localStorage databases if they do not exist yet or are outdated
 function seedDatabase() {
-  const currentSeedVersion = '7'; // Force refresh seed databases
+  const currentSeedVersion = '8'; // Force refresh seed databases
   const seededVersion = localStorage.getItem('stackly_seed_version');
   
   if (seededVersion !== currentSeedVersion) {
