@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact Us - Stackly Marketplace</title>
+  <link rel="stylesheet" href="../css/styles.css">
+  <link rel="stylesheet" href="../css/animations.css">
+  <style>
+    .contact-hero {
+      background: linear-gradient(180deg, rgba(238, 242, 247, 0.75) 0%, var(--bg-base) 100%), 
+                  url('../assets/contact_bg.png') no-repeat center center;
+      background-size: cover;
+      background-attachment: fixed;
+      padding: 6rem 0;
+      text-align: center;
+      position: relative;
+    }
+    
+    [data-theme="dark"] .contact-hero {
+      background: linear-gradient(180deg, rgba(7, 9, 19, 0.8) 0%, var(--bg-base) 100%), 
+                  url('../assets/contact_bg.png') no-repeat center center;
+      background-size: cover;
+      background-attachment: fixed;
+    }
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1.2fr 1.8fr;
+      gap: 3rem;
+      align-items: stretch;
+    }
+    @media (max-width: 992px) {
+      .contact-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+    .contact-map-iframe {
+      border: 0;
+      border-radius: calc(var(--radius-lg) - 0.75rem);
+      filter: grayscale(0.1) contrast(1.05);
+      transition: filter 0.3s ease;
+    }
+    [data-theme="dark"] .contact-map-iframe {
+      filter: grayscale(0.8) invert(0.9) contrast(1.2) !important;
+    }
+  </style>
+</head>
+<body>
+  <stackly-loader></stackly-loader>
+  <stackly-header></stackly-header>
+
+  <main>
+    <!-- Contact Hero Section -->
+    <section class="contact-hero">
+      <div class="container fade-in">
+        <span class="badge badge-primary" style="margin-bottom: 1rem;">COMMUNICATIONS</span>
+        <h1 style="font-size: 3rem; font-family: var(--font-title); margin-bottom: 1rem;">Connect with Stackly Nodes</h1>
+        <p style="color: var(--text-secondary); max-width: 600px; margin: 0 auto; line-height: 1.6;">Request support coordinates, report malicious merchants, or enquire about custom vendor services.</p>
+      </div>
+    </section>
+
+    <!-- Details and Form Section -->
+    <section class="reveal-on-scroll" style="padding-top: 4rem;">
+      <div class="container">
+
+        <div class="contact-grid">
+          <!-- Information Details -->
+          <div class="glass glass-card" style="display:flex; flex-direction:column; gap:2.5rem; justify-content:center; padding:3rem 2rem;">
+            <div>
+              <h3 style="font-size: 1.2rem; font-family: var(--font-title); font-weight: 600; margin-bottom: 0.5rem; color: var(--secondary);">Security Hub</h3>
+              <p style="color:var(--text-secondary); font-size:0.9rem; line-height:1.6;">Stackly Operations Center<br>Room 42, Terminal 9<br>Cosmopolis, Earth</p>
+            </div>
+            <div>
+              <h3 style="font-size: 1.2rem; font-family: var(--font-title); font-weight: 600; margin-bottom: 0.5rem; color: var(--primary);">Secure Channels</h3>
+              <p style="color:var(--text-secondary); font-size:0.9rem; line-height:1.6;">Comms: +1 (555) STACKLY<br>Direct Inbox: agent@stackly.com</p>
+            </div>
+            <div>
+              <h3 style="font-size: 1.2rem; font-family: var(--font-title); font-weight: 600; margin-bottom: 0.5rem; color: var(--accent);">Response Matrix</h3>
+              <p style="color:var(--text-secondary); font-size:0.9rem; line-height:1.6;">Typical latency: &lt; 240 milliseconds on incoming tickets.</p>
+            </div>
+          </div>
+
+          <!-- Forms -->
+          <div class="glass glass-card" style="padding: 3rem;">
+            <form onsubmit="event.preventDefault(); alert('Transmission completed. Support logs generated.'); this.reset();">
+              <div class="grid grid-2" style="gap:1rem;">
+                <div class="form-group">
+                  <label class="form-label">Client Name</label>
+                  <input class="form-input" type="text" required placeholder="John Doe">
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Client Email</label>
+                  <input class="form-input" type="email" required placeholder="john@doe.com">
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Signal Subject</label>
+                <input class="form-input" type="text" required placeholder="Vendor node inquiry">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Message Payload</label>
+                <textarea class="form-input" required placeholder="Type your support request message..."></textarea>
+              </div>
+              <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1rem;">Transmit Signal</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Interactive Google Map Section -->
+    <section class="reveal-on-scroll" style="padding-top: 0; padding-bottom: 4rem;">
+      <div class="container">
+        <div class="glass glass-card" style="padding: 0.75rem; height: 450px; border-radius: var(--radius-lg); overflow: hidden; position: relative;">
+          <iframe 
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3168.639290621062!2d-122.08385112423377!3d37.42247637206857!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x808fba02425dad8f%3A0x6c63c999b59576f5!2sGoogleplex!5e0!3m2!1sen!2sus!4v1700000000000!5m2!1sen!2sus" 
+            width="100%" 
+            height="100%" 
+            class="contact-map-iframe"
+            allowfullscreen="" 
+            loading="lazy" 
+            referrerpolicy="no-referrer-when-downgrade">
+          </iframe>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <stackly-footer></stackly-footer>
+
+  <script src="../js/mockData.js"></script>
+  <script src="../js/components.js"></script>
+  <script src="../js/dashboard.js"></script>
+</body>
+</html>

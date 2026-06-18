@@ -1,0 +1,1495 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vendor Dashboard - Stackly Marketplace</title>
+  <link rel="stylesheet" href="../css/styles.css">
+  <link rel="stylesheet" href="../css/animations.css">
+  <link rel="stylesheet" href="../css/dashboard.css">
+  <style>
+    /* Consolidated tab styling */
+    .dashboard-tab-content {
+      display: none;
+    }
+    
+    /* Product grid inside dashboard tab */
+    .product-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1.5rem;
+    }
+    @media (max-width: 1200px) {
+      .product-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+    @media (max-width: 900px) {
+      .product-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+    @media (max-width: 550px) {
+      .product-grid {
+        grid-template-columns: repeat(1, 1fr);
+      }
+    }
+    .product-card {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+    }
+    .product-img-wrapper {
+      position: relative;
+      aspect-ratio: 1;
+      border-radius: var(--radius-md) var(--radius-md) 0 0;
+      overflow: hidden;
+      background: var(--bg-surface-alt);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0.5rem;
+    }
+    .product-img {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+      transition: transform var(--transition-normal);
+    }
+    .product-card:hover .product-img {
+      transform: scale(1.08);
+    }
+    .product-discount-badge {
+      position: absolute;
+      top: 1rem;
+      left: 1rem;
+      z-index: 5;
+    }
+    .product-details {
+      padding: 1.25rem;
+      display: flex;
+      flex-direction: column;
+      flex-grow: 1;
+      gap: 0.75rem;
+    }
+    .product-category {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .product-name {
+      font-size: 1.1rem;
+      font-weight: 600;
+      line-height: 1.3;
+      color: var(--text-primary);
+      text-decoration: none;
+    }
+    .product-rating {
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+      font-size: 0.85rem;
+      color: #fbbf24;
+    }
+    .product-rating span {
+      color: var(--text-muted);
+      margin-left: 0.25rem;
+    }
+    .product-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: auto;
+      padding-top: 0.5rem;
+    }
+    .product-price {
+      font-size: 1.2rem;
+      font-weight: 700;
+      font-family: var(--font-title);
+    }
+    .product-price del {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      font-weight: 500;
+      margin-left: 0.5rem;
+    }
+    select.sort-select {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      padding: 0.6rem 2.5rem 0.6rem 1rem;
+      color: var(--text-primary);
+      cursor: pointer;
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      appearance: none;
+      background-repeat: no-repeat;
+      background-position: right 0.75rem center;
+      background-size: 1rem;
+      width: auto;
+      min-width: 180px;
+    }
+    [data-theme="light"] select.sort-select {
+      background-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSJibGFjayIgc3Ryb2tlLXdpZHRoPSIyIj48cGF0aCBkPSJNNiA5bDYgNiA2LTYiLz48L3N2Zz4=");
+    }
+    [data-theme="dark"] select.sort-select {
+      background-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSJ3aGl0ZSIgc3Ryb2tlLXdpZHRoPSIyIj48cGF0aCBkPSJNNiA5bDYgNiA2LTYiLz48L3N2Zz4=");
+    }
+
+    /* Inventory styles */
+    .stock-bar-container {
+      width: 100%;
+      height: 6px;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 10px;
+      overflow: hidden;
+      margin-top: 0.5rem;
+    }
+    .stock-bar-fill {
+      height: 100%;
+      border-radius: 10px;
+    }
+
+    /* Reviews styles */
+    .rating-bars {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      width: 100%;
+      max-width: 320px;
+    }
+    .rating-bar-row {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-size: 0.85rem;
+    }
+    .rating-progress-bg {
+      flex-grow: 1;
+      height: 6px;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+    .rating-progress-fill {
+      height: 100%;
+      background: #fbbf24;
+      border-radius: 10px;
+    }
+
+    /* Settings tab styling */
+    .settings-grid {
+      display: grid;
+      grid-template-columns: 1fr 2fr;
+      gap: 2rem;
+      align-items: start;
+    }
+    @media (max-width: 768px) {
+      .settings-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+    .settings-nav {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+    .settings-nav-item {
+      padding: 1rem 1.5rem;
+      border-radius: var(--radius-sm);
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid var(--border-color);
+      cursor: pointer;
+      font-weight: 500;
+      color: var(--text-secondary);
+      transition: all var(--transition-fast);
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    .settings-nav-item:hover, .settings-nav-item.active {
+      color: var(--text-primary);
+      border-color: var(--primary);
+    }
+    .settings-nav-item.active {
+      background: rgba(40, 116, 240, 0.05);
+      border-color: var(--primary);
+      color: var(--primary);
+    }
+    .settings-pane {
+      display: none;
+    }
+    .settings-pane.active {
+      display: block;
+    }
+    .toggle-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.25rem 0;
+      border-bottom: 1px solid var(--border-color);
+    }
+    .toggle-row:last-child {
+      border-bottom: none;
+    }
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 50px;
+      height: 26px;
+    }
+    .switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: var(--border-color);
+      transition: .4s;
+      border-radius: 34px;
+    }
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 18px;
+      width: 18px;
+      left: 4px;
+      bottom: 4px;
+      background-color: white;
+      transition: .4s;
+      border-radius: 50%;
+    }
+    input:checked + .slider {
+      background-color: var(--primary);
+    }
+    input:checked + .slider:before {
+      transform: translateX(24px);
+    }
+  </style>
+</head>
+<body>
+  <!-- Loader -->
+  <stackly-loader></stackly-loader>
+
+  <!-- Route Access Guard check -->
+  <script src="../js/mockData.js"></script>
+  <script src="../js/auth.js"></script>
+  <script>
+    if (!StacklyAuth.guardRoute('vendor')) {
+      document.body.style.display = 'none';
+    }
+  </script>
+
+  <div class="dashboard-wrapper">
+    <!-- Sidebar -->
+    <stackly-sidebar role="vendor" active="dashboard"></stackly-sidebar>
+
+    <!-- Content Deck -->
+    <div class="dashboard-main">
+      <!-- Topbar Navigation -->
+      <stackly-dashboard-header search-placeholder="Search listings, orders..."></stackly-dashboard-header>
+
+      <!-- Main Dashboard Contents -->
+      <div class="dashboard-content fade-in">
+        
+        <!-- ==================== TAB: DASHBOARD (OVERVIEW) ==================== -->
+        <div class="dashboard-tab-content" id="tab-content-dashboard">
+          <div class="dashboard-header">
+            <div>
+              <h1>Vendor Command Panel</h1>
+              <p>Welcome, <span id="vendor-user-name" style="font-weight: 700; color: var(--primary);">Merchant</span>. Here is your store overview for today.</p>
+            </div>
+            <div>
+              <span class="badge badge-success">Store Online</span>
+            </div>
+          </div>
+
+          <!-- Stats Grid -->
+          <div class="stats-grid">
+            <div class="glass glass-card stat-card" style="cursor: pointer;" onclick="switchToTab('earnings')">
+              <div class="stat-info">
+                <span class="stat-title">Store Revenue</span>
+                <span class="stat-value" id="vendor-revenue">$0</span>
+                <span class="stat-change up">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" style="width: 16px; height: 16px;"><path fill-rule="evenodd" d="M5.293 9.707a1 1 0 010-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 01-1.414 1.414L11 7.414V15a1 1 0 11-2 0V7.414L6.707 9.707a1 1 0 01-1.414 0z" clip-rule="evenodd"/></svg>
+                  +8.2% vs last month
+                </span>
+              </div>
+              <div class="stat-icon" style="color: var(--primary);">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" style="width: 26px; height: 26px;"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+              </div>
+            </div>
+
+            <div class="glass glass-card stat-card" style="cursor: pointer;" onclick="switchToTab('orders')">
+              <div class="stat-info">
+                <span class="stat-title">Total Orders</span>
+                <span class="stat-value" id="vendor-orders-count">0</span>
+                <span class="stat-change up">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" style="width: 16px; height: 16px;"><path fill-rule="evenodd" d="M5.293 9.707a1 1 0 010-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 01-1.414 1.414L11 7.414V15a1 1 0 11-2 0V7.414L6.707 9.707a1 1 0 01-1.414 0z" clip-rule="evenodd"/></svg>
+                  +14.1%
+                </span>
+              </div>
+              <div class="stat-icon" style="color: var(--success);">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" style="width: 26px; height: 26px;"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"/></svg>
+              </div>
+            </div>
+
+            <div class="glass glass-card stat-card" style="cursor: pointer;" onclick="switchToTab('products')">
+              <div class="stat-info">
+                <span class="stat-title">Active Products</span>
+                <span class="stat-value" id="vendor-products-count">0</span>
+                <span class="stat-change text-muted">Running Nominal</span>
+              </div>
+              <div class="stat-icon" style="color: var(--secondary);">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" style="width: 26px; height: 26px;"><path stroke-linecap="round" stroke-linejoin="round" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/></svg>
+              </div>
+            </div>
+
+            <div class="glass glass-card stat-card" style="cursor: pointer;" onclick="switchToTab('reviews')">
+              <div class="stat-info">
+                <span class="stat-title">Store Rating</span>
+                <span class="stat-value" id="vendor-rating">4.8</span>
+                <span class="stat-change up" style="color: var(--warning);">★★★★★</span>
+              </div>
+              <div class="stat-icon" style="color: var(--accent);">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" style="width: 26px; height: 26px;"><path stroke-linecap="round" stroke-linejoin="round" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.907c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.906a1 1 0 00.95-.69l1.519-4.674z"/></svg>
+              </div>
+            </div>
+          </div>
+
+          <!-- SVG Line/Bar Charts Grid -->
+          <div class="charts-grid">
+            <div class="glass glass-card chart-card">
+              <div class="chart-header">
+                <span class="chart-title">Revenue Forecast ($)</span>
+                <span class="badge badge-primary">Dynamic Flow</span>
+              </div>
+              <div class="chart-container" id="vendorLineChart">
+                <!-- Rendered by dashboard.js -->
+              </div>
+            </div>
+
+            <div class="glass glass-card chart-card">
+              <div class="chart-header">
+                <span class="chart-title">Monthly Units Sold</span>
+                <span class="badge badge-secondary">Sales Index</span>
+              </div>
+              <div class="chart-container" id="vendorBarChart">
+                <!-- Rendered by dashboard.js -->
+              </div>
+            </div>
+          </div>
+
+          <!-- Vendor Orders Table -->
+          <div class="glass glass-card table-card">
+            <div class="table-header">
+              <h3 style="font-size: 1.25rem; font-family: var(--font-title); font-weight: 600;">Recent Customer Invoices</h3>
+              <button onclick="switchToTab('orders')" class="btn btn-secondary" style="padding: 0.5rem 1rem; font-size: 0.85rem;">View Orders</button>
+            </div>
+            <div class="table-wrapper">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Order ID</th>
+                    <th>Customer Client</th>
+                    <th>Order Date</th>
+                    <th>Total Cost</th>
+                    <th>Status</th>
+                    <th>Allocated Items</th>
+                  </tr>
+                </thead>
+                <tbody id="vendor-orders-table-body">
+                  <!-- Populated dynamically -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- ==================== TAB: PRODUCTS (MY PRODUCTS) ==================== -->
+        <div class="dashboard-tab-content" id="tab-content-products">
+          <div class="dashboard-header">
+            <div>
+              <h1>My Listed Products</h1>
+              <p>Manage, search, and delete your listed products in the marketplace.</p>
+            </div>
+            <div>
+             
+            </div>
+          </div>
+
+          <!-- Filter & Search Panel -->
+          <div class="glass glass-card" style="padding: 1.5rem; display: flex; justify-content: space-between; align-items: center; gap: 1.5rem; flex-wrap: wrap; margin-bottom: 2rem;">
+            <div class="search-box" style="width: 300px; max-width: 100%;">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+              <input type="text" id="dashboard-product-search" placeholder="Search products by name..." oninput="filterDashboardProducts()">
+            </div>
+            <div style="display: flex; gap: 1rem; flex-wrap: wrap; align-items: center;">
+              <!-- Category Filter -->
+              <select class="form-input sort-select" id="dashboard-product-cat" onchange="filterDashboardProducts()">
+                <option value="all">All Categories</option>
+              </select>
+              
+              <!-- Sorting Filter -->
+              <select class="form-input sort-select" id="dashboard-product-sort" onchange="filterDashboardProducts()">
+                <option value="default">Default Sort</option>
+                <option value="price-asc">Price: Low to High</option>
+                <option value="price-desc">Price: High to Low</option>
+                <option value="rating-desc">Rating: High to Low</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Products Grid container -->
+          <div class="product-grid" id="dashboard-products-grid">
+            <!-- Populated via JS -->
+          </div>
+        </div>
+
+        <!-- ==================== TAB: ADD-PRODUCT ==================== -->
+        <div class="dashboard-tab-content" id="tab-content-add-product" style="max-width: 700px;">
+          <div class="dashboard-header">
+            <div>
+              <h1>Create New Listing</h1>
+              <p>Deploy a new product to the Stackly Marketplace catalog index.</p>
+            </div>
+          </div>
+
+          <div class="glass glass-card" style="padding: 3rem 2rem;">
+            <form id="addProductForm">
+              <div class="form-group">
+                <label class="form-label">Product Name</label>
+                <input class="form-input" type="text" id="prod-name" required placeholder="Nova Glow Keyboard">
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">Category Node</label>
+                <select class="form-input sort-select" id="prod-cat" required style="width:100%; border-radius:8px; height: 50px;">
+                  <!-- Populated dynamically -->
+                </select>
+              </div>
+
+              <div class="grid grid-2" style="gap:1rem;">
+                <div class="form-group">
+                  <label class="form-label">Listing Price ($)</label>
+                  <input class="form-input" type="number" step="0.01" id="prod-price" required placeholder="149.00">
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Discount Percentage (%)</label>
+                  <input class="form-input" type="number" min="0" max="95" id="prod-discount" required value="0">
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">Detailed Description</label>
+                <textarea class="form-input" id="prod-desc" required placeholder="Describe item specifications, materials, and glowing features..."></textarea>
+              </div>
+
+              <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1rem;">Deploy Listing</button>
+            </form>
+          </div>
+        </div>
+
+        <!-- ==================== TAB: ORDERS ==================== -->
+        <div class="dashboard-tab-content" id="tab-content-orders">
+          <div class="dashboard-header">
+            <div>
+              <h1>Store Orders Ledger</h1>
+              <p>Listing purchase orders routed to your store node. Authorize client payouts and status codes.</p>
+            </div>
+          </div>
+
+          <div class="glass glass-card table-card">
+            <div class="table-wrapper">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Order Node ID</th>
+                    <th>Client Customer</th>
+                    <th>Timestamp</th>
+                    <th>Invoice Total</th>
+                    <th>Delivery Status</th>
+                    <th>Allocated Units</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="orders-ledger-table-body">
+                  <!-- JS -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- ==================== TAB: EARNINGS ==================== -->
+        <div class="dashboard-tab-content" id="tab-content-earnings">
+          <div class="dashboard-header">
+            <div>
+              <h1>Earnings & Payouts</h1>
+              <p>Track your contract allocations, balance settlements, and node payouts.</p>
+            </div>
+            <div>
+              <button class="btn btn-primary" onclick="requestPayout()" id="payout-btn">Request Payout Node Transfer</button>
+            </div>
+          </div>
+
+          <!-- Stats Grid -->
+          <div class="stats-grid">
+            <div class="glass glass-card stat-card">
+              <div class="stat-info">
+                <span class="stat-title">Total Revenue</span>
+                <span class="stat-value">$18,450.00</span>
+                <span class="stat-change up">+18% vs last month</span>
+              </div>
+              <div class="stat-icon" style="color: var(--success);">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" style="width: 26px; height: 26px;"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M12 16c-1.657 0-3-.895-3-2s1.343-2 3-2 3 .895 3 2-1.343 2-3 2m0-8V7m0 9v1"/></svg>
+              </div>
+            </div>
+
+            <div class="glass glass-card stat-card">
+              <div class="stat-info">
+                <span class="stat-title">Pending Clearings</span>
+                <span class="stat-value">$2,420.00</span>
+                <span class="stat-change up" style="color: var(--secondary);">Settling in 3 nodes</span>
+              </div>
+              <div class="stat-icon" style="color: var(--secondary);">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" style="width: 26px; height: 26px;"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+              </div>
+            </div>
+
+            <div class="glass glass-card stat-card">
+              <div class="stat-info">
+                <span class="stat-title">Escrow Status</span>
+                <span class="stat-value">Direct Link Active</span>
+                <span class="stat-change up" style="color: var(--success);">Secure payouts verified</span>
+              </div>
+              <div class="stat-icon" style="color: var(--accent);">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" style="width: 26px; height: 26px;"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+              </div>
+            </div>
+          </div>
+
+          <!-- Chart -->
+          <div class="glass glass-card chart-card" style="margin-top: 2rem;">
+            <div class="chart-header">
+              <span class="chart-title">Revenue Forecast History ($)</span>
+              <span class="badge badge-primary">Monthly Ledger</span>
+            </div>
+            <div class="chart-container" id="earningsLineChart" style="height: 260px;">
+              <!-- Rendered by JS -->
+            </div>
+          </div>
+
+          <!-- Transactions Table -->
+          <div class="glass glass-card table-card" style="margin-top: 2rem;">
+            <div class="table-header">
+              <h3 style="font-size: 1.25rem; font-family: var(--font-title); font-weight: 600;">Recent Payout Ledger</h3>
+              <span class="badge badge-secondary">All Cleared Nodes</span>
+            </div>
+            <div class="table-wrapper">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Transaction Hash</th>
+                    <th>Execution Date</th>
+                    <th>Amount Code</th>
+                    <th>Routing Target</th>
+                    <th>Settlement Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td style="font-family: monospace; font-weight: 700; color: var(--secondary);">TXN-8094-11</td>
+                    <td>Jun 12, 2026</td>
+                    <td style="font-weight: 700; color:var(--text-primary);">$4,820.00</td>
+                    <td style="color: var(--text-secondary);">Direct Bank Node #1289</td>
+                    <td><span class="badge badge-success">Cleared</span></td>
+                  </tr>
+                  <tr>
+                    <td style="font-family: monospace; font-weight: 700; color: var(--secondary);">TXN-7345-09</td>
+                    <td>May 28, 2026</td>
+                    <td style="font-weight: 700; color:var(--text-primary);">$3,450.00</td>
+                    <td style="color: var(--text-secondary);">Direct Bank Node #1289</td>
+                    <td><span class="badge badge-success">Cleared</span></td>
+                  </tr>
+                  <tr>
+                    <td style="font-family: monospace; font-weight: 700; color: var(--secondary);">TXN-6211-18</td>
+                    <td>May 10, 2026</td>
+                    <td style="font-weight: 700; color:var(--text-primary);">$5,210.00</td>
+                    <td style="color: var(--text-secondary);">Direct Bank Node #1289</td>
+                    <td><span class="badge badge-success">Cleared</span></td>
+                  </tr>
+                  <tr>
+                    <td style="font-family: monospace; font-weight: 700; color: var(--secondary);">TXN-5099-04</td>
+                    <td>Apr 24, 2026</td>
+                    <td style="font-weight: 700; color:var(--text-primary);">$2,550.00</td>
+                    <td style="color: var(--text-secondary);">Direct Bank Node #1289</td>
+                    <td><span class="badge badge-success">Cleared</span></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- ==================== TAB: INVENTORY ==================== -->
+        <div class="dashboard-tab-content" id="tab-content-inventory">
+          <div class="dashboard-header">
+            <div>
+              <h1>Inventory Registry</h1>
+              <p>Manage product allocations, stock status indicators, and restock actions.</p>
+            </div>
+            <div>
+              <button class="btn btn-primary" onclick="switchToTab('add-product')">Deploy New Listing</button>
+            </div>
+          </div>
+
+          <!-- Stats Grid -->
+          <div class="stats-grid">
+            <div class="glass glass-card stat-card">
+              <div class="stat-info">
+                <span class="stat-title">Total Active SKUs</span>
+                <span class="stat-value" id="stat-skus-count">0</span>
+                <span class="stat-change up" style="color: var(--secondary);">Catalog items indexed</span>
+              </div>
+              <div class="stat-icon" style="color: var(--secondary);">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" style="width: 26px; height: 26px;"><path stroke-linecap="round" stroke-linejoin="round" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg>
+              </div>
+            </div>
+
+            <div class="glass glass-card stat-card">
+              <div class="stat-info">
+                <span class="stat-title">Total Storage Stock</span>
+                <span class="stat-value" id="stat-total-stock">0</span>
+                <span class="stat-change up" style="color: var(--success);">All nodes integrated</span>
+              </div>
+              <div class="stat-icon" style="color: var(--success);">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" style="width: 26px; height: 26px;"><path stroke-linecap="round" stroke-linejoin="round" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
+              </div>
+            </div>
+
+            <div class="glass glass-card stat-card">
+              <div class="stat-info">
+                <span class="stat-title">Stock Outages</span>
+                <span class="stat-value" id="stat-outages-count" style="color: var(--success);">0</span>
+                <span class="stat-change up" style="color: var(--success);">All items active</span>
+              </div>
+              <div class="stat-icon" style="color: var(--danger);">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" style="width: 26px; height: 26px;"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+              </div>
+            </div>
+          </div>
+
+          <!-- Inventory Table -->
+          <div class="glass glass-card table-card" style="margin-top: 2rem;">
+            <div class="table-header">
+              <h3 style="font-size: 1.25rem; font-family: var(--font-title); font-weight: 600;">Product Stock Levels</h3>
+              <span class="badge badge-primary">Database Sync Active</span>
+            </div>
+            <div class="table-wrapper">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Product Node Details</th>
+                    <th>SKU Code</th>
+                    <th>Pricing</th>
+                    <th>Stock Registry</th>
+                    <th>Allocation Status</th>
+                    <th>Quick Action</th>
+                  </tr>
+                </thead>
+                <tbody id="inventory-table-body">
+                  <!-- Populated dynamically -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- ==================== TAB: REVIEWS ==================== -->
+        <div class="dashboard-tab-content" id="tab-content-reviews">
+          <div class="dashboard-header">
+            <div>
+              <h1>Client Testimonials Feedback</h1>
+              <p>Inspect rating comments and respond to buyer inquiries.</p>
+            </div>
+          </div>
+
+          <!-- Feedback Metrics Deck -->
+          <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap:2rem; margin-bottom:2rem;">
+            <!-- Score Card -->
+            <div class="glass glass-card" style="padding: 2rem; display:flex; align-items:center; gap:2rem;">
+              <div style="text-align: center;">
+                <div style="font-size: 3.5rem; font-weight: 800; font-family: var(--font-title); color: #fbbf24; line-height:1;" id="score-value">4.9</div>
+                <div style="font-size: 0.85rem; color: var(--text-muted); text-transform: uppercase; font-weight: 700; margin-top:0.5rem;">Average Rating</div>
+              </div>
+              <div style="width: 1px; background: var(--border-color); height: 80px;"></div>
+              <div>
+                <div style="color: #fbbf24; font-size: 1.25rem;" id="stars-row">★★★★★</div>
+                <div style="font-size: 0.9rem; color: var(--text-secondary); margin-top: 0.25rem;"><span id="total-reviews-count">18</span> verified node ratings</div>
+              </div>
+            </div>
+
+            <!-- Distribution Card -->
+            <div class="glass glass-card" style="padding: 2rem; display: flex; flex-direction: column; justify-content: center;">
+              <div class="rating-bars">
+                <div class="rating-bar-row">
+                  <span style="width: 40px; font-weight:700;">5 Star</span>
+                  <div class="rating-progress-bg"><div class="rating-progress-fill" style="width: 80%;"></div></div>
+                  <span style="width: 30px; text-align:right; color:var(--text-muted);">80%</span>
+                </div>
+                <div class="rating-bar-row">
+                  <span style="width: 40px; font-weight:700;">4 Star</span>
+                  <div class="rating-progress-bg"><div class="rating-progress-fill" style="width: 15%;"></div></div>
+                  <span style="width: 30px; text-align:right; color:var(--text-muted);">15%</span>
+                </div>
+                <div class="rating-bar-row">
+                  <span style="width: 40px; font-weight:700;">3 Star</span>
+                  <div class="rating-progress-bg"><div class="rating-progress-fill" style="width: 5%;"></div></div>
+                  <span style="width: 30px; text-align:right; color:var(--text-muted);">5%</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Table Card -->
+          <div class="glass glass-card table-card">
+            <div class="table-header">
+              <h3 style="font-size: 1.25rem; font-family: var(--font-title); font-weight: 600;">Product Feedback Log</h3>
+              <span class="badge badge-primary">Dynamic Registry</span>
+            </div>
+            <div class="table-wrapper">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Client Node</th>
+                    <th>Item Purchased</th>
+                    <th>Rating Code</th>
+                    <th>Feedback Comment</th>
+                    <th>Registry Status</th>
+                    <th>Response Option</th>
+                  </tr>
+                </thead>
+                <tbody id="reviews-table-body">
+                  <!-- JS -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- ==================== TAB: SETTINGS ==================== -->
+        <div class="dashboard-tab-content" id="tab-content-settings">
+          <div class="dashboard-header">
+            <div>
+              <h1>Preference Configuration</h1>
+              <p>Customize security channels, theme preferences, and identity parameters.</p>
+            </div>
+          </div>
+
+          <div class="settings-grid">
+            <!-- Left Nav -->
+            <div class="settings-nav">
+              <div class="settings-nav-item active" onclick="switchSettingsTab('profile')" id="nav-profile">
+                Profile Details
+              </div>
+              <div class="settings-nav-item" onclick="switchSettingsTab('security')" id="nav-security">
+                Security & Credentials
+              </div>
+              <div class="settings-nav-item" onclick="switchSettingsTab('preferences')" id="nav-preferences">
+                System Preferences
+              </div>
+            </div>
+
+            <!-- Right Panes -->
+            <div>
+              <!-- Tab 1: Profile Pane -->
+              <div class="glass glass-card settings-pane active" id="pane-profile">
+                <h3 style="font-size: 1.25rem; font-family: var(--font-title); font-weight: 600; margin-bottom: 1.5rem;">My Profile Parameters</h3>
+                <form id="settings-profile-form" onsubmit="event.preventDefault(); saveProfileHandler();">
+                  <div class="form-group">
+                    <label class="form-label" for="username">Username / Company Name</label>
+                    <input class="form-input" type="text" id="set-username" required>
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label" for="email">Primary Email address</label>
+                    <input class="form-input" type="email" id="set-email" required>
+                  </div>
+                  <button class="btn btn-primary" type="submit" style="margin-top: 1rem;">Save Profile Updates</button>
+                </form>
+              </div>
+
+              <!-- Tab 2: Security Pane -->
+              <div class="glass glass-card settings-pane" id="pane-security">
+                <h3 style="font-size: 1.25rem; font-family: var(--font-title); font-weight: 600; margin-bottom: 1.5rem;">Update Security Credentials</h3>
+                <form id="settings-security-form" onsubmit="event.preventDefault(); savePasswordHandler();">
+                  <div class="form-group">
+                    <label class="form-label" for="curr-password">Current Password</label>
+                    <input class="form-input" type="password" id="set-curr-pass" required placeholder="••••••••">
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label" for="new-password">New Secure Password</label>
+                    <input class="form-input" type="password" id="set-new-pass" required placeholder="••••••••">
+                  </div>
+                  <button class="btn btn-primary" type="submit" style="margin-top: 1rem;">Update Password</button>
+                </form>
+              </div>
+
+              <!-- Tab 3: System Preferences Pane -->
+              <div class="glass glass-card settings-pane" id="pane-preferences">
+                <h3 style="font-size: 1.25rem; font-family: var(--font-title); font-weight: 600; margin-bottom: 1.5rem;">System Interface Preferences</h3>
+                
+                <div class="toggle-row">
+                  <div>
+                    <h4 style="font-weight: 600; margin-bottom: 0.25rem;">Visual Theme</h4>
+                    <p style="font-size: 0.85rem; color: var(--text-secondary);">Toggle between Flipkart-style Light and Navy Dark themes</p>
+                  </div>
+                  <button class="btn btn-secondary" onclick="toggleSystemTheme()" style="padding: 0.5rem 1rem; font-size: 0.85rem;" id="pref-theme-btn">
+                    Switch Theme
+                  </button>
+                </div>
+
+                <div class="toggle-row">
+                  <div>
+                    <h4 style="font-weight: 600; margin-bottom: 0.25rem;">Dynamic Sounds</h4>
+                    <p style="font-size: 0.85rem; color: var(--text-secondary);">Play micro-sounds on checkout buttons and tabs click</p>
+                  </div>
+                  <label class="switch">
+                    <input type="checkbox" id="pref-sounds" checked onchange="savePreferences()">
+                    <span class="slider"></span>
+                  </label>
+                </div>
+
+                <div class="toggle-row">
+                  <div>
+                    <h4 style="font-weight: 600; margin-bottom: 0.25rem;">Transactional Email Notifications</h4>
+                    <p style="font-size: 0.85rem; color: var(--text-secondary);">Receive invoices and logs via primary mail node</p>
+                  </div>
+                  <label class="switch">
+                    <input type="checkbox" id="pref-email" checked onchange="savePreferences()">
+                    <span class="slider"></span>
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <script src="../js/components.js"></script>
+  <script src="../js/dashboard.js"></script>
+  <script>
+    const currentUser = StacklyAuth.getCurrentUser();
+
+    document.addEventListener('DOMContentLoaded', () => {
+      if (currentUser) {
+        document.getElementById('vendor-user-name').innerText = currentUser.username;
+        
+        // Populate profile settings
+        document.getElementById('set-username').value = currentUser.username;
+        document.getElementById('set-email').value = currentUser.email;
+        loadPreferences();
+      }
+
+      // Initialize all data elements
+      initializeVendorDetails(currentUser);
+
+      // Handle custom events from sidebar click tab changes
+      window.addEventListener('dashboardTabChanged', (e) => {
+        const activeTab = e.detail.tab;
+        if (activeTab === 'dashboard') {
+          drawCharts();
+        } else if (activeTab === 'products') {
+          populateDashboardCategories();
+          filterDashboardProducts();
+        } else if (activeTab === 'earnings') {
+          drawEarningsChart();
+        } else if (activeTab === 'inventory') {
+          populateInventory();
+        } else if (activeTab === 'reviews') {
+          renderReviews();
+        } else if (activeTab === 'orders') {
+          populateOrdersLedger();
+        }
+      });
+
+      // Initialize main components framework
+      StacklyDashboard.initTabs('vendor');
+
+      // Populate Categories inside add product dropdown selector
+      const db = window.StacklyDB;
+      const select = document.getElementById('prod-cat');
+      if (db && select) {
+        select.innerHTML = db.getCategories().map(c => `
+          <option value="${c.id}">${c.name}</option>
+        `).join('');
+      }
+
+      // Handle theme change chart redraw
+      window.addEventListener('themeChanged', () => drawCharts());
+
+      // Redraw charts on window resize/orientation change (debounced)
+      let resizeTimeout;
+      window.addEventListener('resize', () => {
+        clearTimeout(resizeTimeout);
+        resizeTimeout = setTimeout(() => {
+          const urlParams = new URLSearchParams(window.location.search);
+          const activeTab = urlParams.get('tab') || 'dashboard';
+          if (activeTab === 'dashboard') drawCharts();
+          else if (activeTab === 'earnings') drawEarningsChart();
+        }, 200);
+      });
+    });
+
+    // Helper for direct tab switches from UI elements
+    function switchToTab(tabId) {
+      const links = document.querySelectorAll('.sidebar-link');
+      links.forEach(l => {
+        if (l.getAttribute('data-id') === tabId) {
+          l.click();
+        }
+      });
+    }
+
+    function getVendorName(user) {
+      const db = window.StacklyDB;
+      if (!db) return '';
+      const matchedVendor = db.getVendors().find(v => 
+        v.name.toLowerCase().includes('novatech') || 
+        (user && user.username.toLowerCase().includes(v.name.split(' ')[0].toLowerCase()))
+      ) || db.getVendors()[0];
+      return matchedVendor ? matchedVendor.name : '';
+    }
+
+    function initializeVendorDetails(user) {
+      const db = window.StacklyDB;
+      if (!db) return;
+
+      const vendorName = getVendorName(user);
+      const matchedVendor = db.getVendors().find(v => v.name === vendorName) || db.getVendors()[0];
+
+      // Update Rating widget
+      document.getElementById('vendor-rating').innerText = matchedVendor.rating.toFixed(1);
+
+      // Get products owned by this vendor
+      const allProducts = db.getProducts();
+      const vendorProducts = allProducts.filter(p => p.vendor === vendorName);
+      document.getElementById('vendor-products-count').innerText = vendorProducts.length;
+
+      // Filter and count orders containing this vendor's products
+      const allOrders = db.getOrders();
+      const vendorOrders = allOrders.filter(order => {
+        return order.items.toLowerCase().includes('phone') || 
+               order.items.toLowerCase().includes('book') || 
+               order.items.toLowerCase().includes('anc');
+      });
+
+      document.getElementById('vendor-orders-count').innerText = vendorOrders.length;
+      
+      // Calculate fake total revenue
+      let fakeRevenue = vendorOrders.reduce((sum, order) => sum + order.total, 0);
+      document.getElementById('vendor-revenue').innerText = `$${fakeRevenue.toLocaleString()}`;
+
+      // Populate notifications list
+      populateNotifications();
+
+      // Populate overview recent orders table
+      populateOrdersTable(vendorOrders);
+
+      // Draw SVG Charts
+      drawCharts();
+    }
+
+    function populateNotifications() {
+      const db = window.StacklyDB;
+      const list = document.getElementById('vendor-notif-list');
+      if (db && list) {
+        const alerts = [
+          { title: 'Item Low in Stock', desc: 'StackPhone Pro neon inventory is below 5 units', time: '10 mins ago' },
+          { title: 'New Store Order', desc: 'Order STK-9402 successfully authorized', time: '2 hours ago' }
+        ];
+        list.innerHTML = alerts.map(a => `
+          <div class="notification-item" onclick="switchToTab('notifications')">
+            <div class="notification-icon-wrapper" style="background: rgba(40,116,240,0.15); color: var(--primary);">
+              ⚡
+            </div>
+            <div class="notification-item-content">
+              <span class="notification-title">${a.title}</span>
+              <span class="notification-desc">${a.desc}</span>
+              <span class="notification-time">${a.time}</span>
+            </div>
+          </div>
+        `).join('');
+      }
+    }
+
+    function populateOrdersTable(orders) {
+      const body = document.getElementById('vendor-orders-table-body');
+      if (body) {
+        body.innerHTML = orders.map(o => {
+          let statusBadge = 'badge-success';
+          if (o.status === 'Pending') statusBadge = 'badge-warning';
+          else if (o.status === 'Cancelled') statusBadge = 'badge-danger';
+
+          return `
+            <tr>
+              <td style="font-weight: 700; color: var(--primary);">${o.id}</td>
+              <td>${o.customer}</td>
+              <td>${o.date}</td>
+              <td>$${o.total.toFixed(2)}</td>
+              <td><span class="badge ${statusBadge}">${o.status}</span></td>
+              <td style="color: var(--text-secondary);">${o.items}</td>
+            </tr>
+          `;
+        }).join('');
+      }
+    }
+
+    function drawCharts() {
+      const salesData = [80, 150, 120, 260, 310, 270, 380];
+      const salesLabels = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+
+      const signupData = [120, 190, 160, 240, 280, 210];
+      const signupLabels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'];
+
+      window.StacklyDashboard.renderLineChart('vendorLineChart', salesData, salesLabels);
+      window.StacklyDashboard.renderBarChart('vendorBarChart', signupData, signupLabels);
+    }
+
+    /* ==================== PRODUCTS TAB FUNCTIONS ==================== */
+    function populateDashboardCategories() {
+      const db = window.StacklyDB;
+      const select = document.getElementById('dashboard-product-cat');
+      if (db && select) {
+        select.innerHTML = '<option value="all">All Categories</option>';
+        db.getCategories().forEach(cat => {
+          select.innerHTML += `<option value="${cat.id}">${cat.name}</option>`;
+        });
+      }
+    }
+
+    function filterDashboardProducts() {
+      const db = window.StacklyDB;
+      const container = document.getElementById('dashboard-products-grid');
+      if (!db || !container || !currentUser) return;
+
+      const vendorName = getVendorName(currentUser);
+      let products = db.getProducts().filter(p => p.vendor === vendorName);
+
+      // Category filter
+      const catVal = document.getElementById('dashboard-product-cat').value;
+      if (catVal !== 'all') {
+        products = products.filter(p => p.category === catVal);
+      }
+
+      // Search query filter
+      const query = document.getElementById('dashboard-product-search').value.toLowerCase().trim();
+      if (query) {
+        products = products.filter(p => p.name.toLowerCase().includes(query));
+      }
+
+      // Sorting
+      const sortVal = document.getElementById('dashboard-product-sort').value;
+      if (sortVal === 'price-asc') {
+        products.sort((a, b) => {
+          const priceA = a.price * (1 - a.discount / 100);
+          const priceB = b.price * (1 - b.discount / 100);
+          return priceA - priceB;
+        });
+      } else if (sortVal === 'price-desc') {
+        products.sort((a, b) => {
+          const priceA = a.price * (1 - a.discount / 100);
+          const priceB = b.price * (1 - b.discount / 100);
+          return priceB - priceA;
+        });
+      } else if (sortVal === 'rating-desc') {
+        products.sort((a, b) => b.rating - a.rating);
+      }
+
+      // Render cards
+      if (products.length === 0) {
+        container.innerHTML = `
+          <div style="grid-column: 1/-1; text-align: center; padding: 4rem 0; color: var(--text-secondary);" class="glass glass-card">
+            <h3>No products listed under these filters.</h3>
+            <p>Try creating a new listing or changing your search filters.</p>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = products.map(p => {
+        const discountAmt = p.price * (1 - p.discount / 100);
+        return `
+          <div class="glass glass-card product-card">
+            <div class="product-img-wrapper">
+              ${p.discount > 0 ? `<div class="badge badge-danger product-discount-badge">-${p.discount}%</div>` : ''}
+              <img class="product-img" src="${p.image}" alt="${p.name}">
+            </div>
+            <div class="product-details">
+              <span class="product-category">${p.category}</span>
+              <span class="product-name" style="font-weight: 700;">${p.name}</span>
+              <div class="product-rating">
+                ${'★'.repeat(Math.floor(p.rating))}${'☆'.repeat(5 - Math.floor(p.rating))}
+                <span>(${p.reviewsCount} reviews)</span>
+              </div>
+              <div class="product-footer" style="margin-top: 1.5rem;">
+                <div class="product-price">
+                  $${p.discount > 0 ? discountAmt.toFixed(2) : p.price.toFixed(2)}
+                  ${p.discount > 0 ? `<del>$${p.price.toFixed(2)}</del>` : ''}
+                </div>
+                <button class="btn btn-danger btn-sm" onclick="deleteDashboardProduct('${p.id}')" style="padding: 0.5rem 1rem; font-size: 0.8rem; border-radius: 8px;">
+                  Delete Listing
+                </button>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function deleteDashboardProduct(productId) {
+      const db = window.StacklyDB;
+      if (!db) return;
+      const product = db.getProducts().find(p => p.id === productId);
+      if (!product) return;
+
+      if (confirm(`Are you sure you want to permanently delete the listing for "${product.name}"?`)) {
+        let allProducts = db.getProducts();
+        allProducts = allProducts.filter(p => p.id !== productId);
+        db.saveProducts(allProducts);
+        
+        // Refresh products list
+        filterDashboardProducts();
+        alert('Listing deleted successfully!');
+      }
+    }
+
+    /* ==================== ADD PRODUCT FORM SUBMIT ==================== */
+    document.getElementById('addProductForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+
+      const db = window.StacklyDB;
+      const name = document.getElementById('prod-name').value.trim();
+      const cat = document.getElementById('prod-cat').value;
+      const price = parseFloat(document.getElementById('prod-price').value);
+      const discount = parseInt(document.getElementById('prod-discount').value);
+      const desc = document.getElementById('prod-desc').value.trim();
+
+      const newImage = 'assets/new_product.webp';
+      const vendorName = getVendorName(currentUser);
+
+      const newProduct = {
+        id: 'p' + (db.getProducts().length + 1),
+        name: name,
+        price: price,
+        rating: 5.0,
+        reviewsCount: 0,
+        category: cat,
+        image: newImage,
+        vendor: vendorName,
+        description: desc,
+        featured: true,
+        trending: false,
+        deal: discount > 0,
+        discount: discount
+      };
+
+      let products = db.getProducts();
+      products.unshift(newProduct);
+      db.saveProducts(products);
+
+      alert('Listing Deployed! Item appended to global marketplace catalogs.');
+      document.getElementById('addProductForm').reset();
+      switchToTab('products');
+    });
+
+    /* ==================== ORDERS TAB FUNCTIONS ==================== */
+    function populateOrdersLedger() {
+      const db = window.StacklyDB;
+      const body = document.getElementById('orders-ledger-table-body');
+      if (!db || !body) return;
+
+      const vendorName = getVendorName(currentUser);
+      let orders = db.getOrders().filter(o => {
+        return o.items.toLowerCase().includes('phone') || 
+               o.items.toLowerCase().includes('book') || 
+               o.items.toLowerCase().includes('anc');
+      });
+
+      if (orders.length === 0) {
+        body.innerHTML = `
+          <tr>
+            <td colspan="7" style="text-align:center; padding: 3rem 0; color:var(--text-muted);">
+              No transacting orders logged under your store node.
+            </td>
+          </tr>
+        `;
+        return;
+      }
+
+      body.innerHTML = orders.map(o => {
+        let statusBadge = 'badge-success';
+        if (o.status === 'Pending') statusBadge = 'badge-warning';
+        else if (o.status === 'Cancelled') statusBadge = 'badge-danger';
+
+        return `
+          <tr>
+            <td style="font-weight: 700; color: var(--secondary);">${o.id}</td>
+            <td>${o.customer}</td>
+            <td>${o.date}</td>
+            <td style="font-weight:600;">$${o.total.toFixed(2)}</td>
+            <td><span class="badge ${statusBadge}">${o.status}</span></td>
+            <td style="color:var(--text-secondary);">${o.items}</td>
+            <td>
+              <button onclick="toggleOrderStatus('${o.id}')" class="btn btn-secondary" style="padding: 0.3rem 0.6rem; font-size: 0.75rem;">Toggle Status</button>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    function toggleOrderStatus(orderId) {
+      const db = window.StacklyDB;
+      if (db) {
+        let orders = db.getOrders();
+        let order = orders.find(o => o.id === orderId);
+        if (order) {
+          order.status = order.status === 'Paid' ? 'Pending' : (order.status === 'Pending' ? 'Cancelled' : 'Paid');
+          db.saveOrders(orders);
+          populateOrdersLedger();
+        }
+      }
+    }
+
+    /* ==================== EARNINGS TAB FUNCTIONS ==================== */
+    function drawEarningsChart() {
+      const earningsData = [2550, 5210, 3450, 4820, 18450];
+      const earningsLabels = ['Apr', 'May (1)', 'May (2)', 'Jun (1)', 'Cumulative Balance'];
+      StacklyDashboard.renderLineChart('earningsLineChart', earningsData, earningsLabels);
+    }
+
+    function requestPayout() {
+      alert("Payout of $2,420.00 initiated! Payout routing path: Direct Bank Node #1289.");
+      const btn = document.getElementById('payout-btn');
+      if (btn) {
+        btn.innerText = "Payout Request Processing...";
+        btn.disabled = true;
+        btn.style.opacity = "0.6";
+        btn.style.cursor = "not-allowed";
+      }
+    }
+
+    /* ==================== INVENTORY TAB FUNCTIONS ==================== */
+    function populateInventory() {
+      const db = window.StacklyDB;
+      const body = document.getElementById('inventory-table-body');
+      if (!db || !body) return;
+
+      const vendorName = getVendorName(currentUser);
+      const products = db.getProducts().filter(p => p.vendor === vendorName);
+
+      document.getElementById('stat-skus-count').innerText = products.length;
+      
+      let totalStock = 0;
+      let outages = 0;
+
+      body.innerHTML = products.map((p, idx) => {
+        const mockStocks = [85, 24, 60, 40, 110, 95, 30, 75, 12];
+        const stock = mockStocks[idx % mockStocks.length];
+        totalStock += stock;
+
+        let statusClass = 'badge-success';
+        let statusText = 'In Stock';
+        let barColor = 'var(--success)';
+
+        if (stock < 30) {
+          statusClass = 'badge-warning';
+          statusText = 'Low Stock';
+          barColor = 'var(--secondary)';
+        }
+
+        const percentage = Math.min(100, Math.round((stock / 120) * 100));
+
+        return `
+          <tr>
+            <td>
+              <div style="display:flex; align-items:center; gap:0.75rem;">
+                <img src="${p.image}" style="width:36px; height:36px; border-radius:6px; object-fit:cover; border:1px solid var(--border-color);"/>
+                <div>
+                  <div style="font-weight:700; color:var(--text-primary);">${p.name}</div>
+                  <div style="font-size:0.75rem; color:var(--text-muted);">${p.category}</div>
+                </div>
+              </div>
+            </td>
+            <td style="font-family:monospace; font-weight:700; color:var(--secondary);">SKU-${p.id.toUpperCase()}-X</td>
+            <td>$${p.price.toFixed(2)}</td>
+            <td style="min-width: 140px;">
+              <div style="display:flex; justify-content:space-between; font-size:0.8rem; font-weight:700;">
+                <span>${stock} units</span>
+                <span style="color:var(--text-muted);">${percentage}%</span>
+              </div>
+              <div class="stock-bar-container">
+                <div class="stock-bar-fill" style="width: ${percentage}%; background: ${barColor};"></div>
+              </div>
+            </td>
+            <td><span class="badge ${statusClass}">${statusText}</span></td>
+            <td>
+              <button class="btn btn-secondary" onclick="restockItem('${p.name}', ${idx})" style="padding: 0.35rem 0.75rem; font-size: 0.8rem;" id="restock-btn-${idx}">Restock Node</button>
+            </td>
+          </tr>
+        `;
+      }).join('');
+
+      document.getElementById('stat-total-stock').innerText = totalStock;
+      document.getElementById('stat-outages-count').innerText = outages;
+    }
+
+    function restockItem(name, idx) {
+      alert(`Restock request sent for ${name}! Added 50 units allocation.`);
+      const btn = document.getElementById(`restock-btn-${idx}`);
+      if (btn) {
+        btn.innerText = "Processing...";
+        btn.disabled = true;
+        btn.style.opacity = "0.6";
+        btn.style.cursor = "not-allowed";
+        setTimeout(() => {
+          btn.innerText = "Restocked ✓";
+        }, 1500);
+      }
+    }
+
+    /* ==================== REVIEWS TAB FUNCTIONS ==================== */
+    function renderReviews() {
+      const body = document.getElementById('reviews-table-body');
+      if (!body) return;
+
+      const vendorReviews = [
+        { client: "Alex Mercer", item: "Quantum Mech Pro Keypad", rating: 5, comment: "Exquisite visual glowing style. Heavy-duty keyboard frame.", status: "Approved" },
+        { client: "Sarah Connor", item: "Cyberpunk Tech Jacket", rating: 5, comment: "Insulated design. The dual LED line outlines are premium.", status: "Approved" },
+        { client: "HackerOne", item: "Aero Mesh ZeroG Chair", rating: 4, comment: "Excellent lumbar support. Easy to adjust recline angles.", status: "Approved" },
+        { client: "DevNode", item: "Quantum Mech Pro Keypad", rating: 5, comment: "Tactile click switches feel top tier. Satisfied developer here.", status: "Approved" }
+      ];
+
+      body.innerHTML = vendorReviews.map((r, idx) => `
+        <tr>
+          <td style="font-weight: 700; color:var(--text-primary);">${r.client}</td>
+          <td style="color:var(--secondary); font-weight:700;">${r.item}</td>
+          <td style="color:#fbbf24; font-weight:700;">${'★'.repeat(r.rating)}</td>
+          <td style="font-style:italic; color:var(--text-secondary); max-width:280px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">"${r.comment}"</td>
+          <td><span class="badge badge-success">${r.status}</span></td>
+          <td>
+            <button class="btn btn-secondary" onclick="replyReview('${r.client}', ${idx})" style="padding: 0.35rem 0.75rem; font-size: 0.8rem;" id="reply-btn-${idx}">Reply to Client</button>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    function replyReview(client, idx) {
+      const reply = prompt(`Enter reply response to client ${client}:`, "Thank you for the review! We are glad you enjoyed the build quality.");
+      if (reply) {
+        alert("Reply successfully registered on product feedback index!");
+        const btn = document.getElementById(`reply-btn-${idx}`);
+        if (btn) {
+          btn.innerText = "Reply Sent ✓";
+          btn.disabled = true;
+          btn.style.opacity = "0.6";
+          btn.style.cursor = "not-allowed";
+        }
+      }
+    }
+
+    /* ==================== SETTINGS TAB FUNCTIONS ==================== */
+    function switchSettingsTab(tabId) {
+      document.querySelectorAll('.settings-nav-item').forEach(btn => btn.classList.remove('active'));
+      document.querySelectorAll('.settings-pane').forEach(pane => pane.classList.remove('active'));
+
+      document.getElementById(`nav-${tabId}`).classList.add('active');
+      document.getElementById(`pane-${tabId}`).classList.add('active');
+    }
+
+    function saveProfileHandler() {
+      const username = document.getElementById('set-username').value.trim();
+      const email = document.getElementById('set-email').value.trim().toLowerCase();
+      
+      if (!currentUser) return;
+
+      const users = JSON.parse(localStorage.getItem('stackly_users')) || [];
+      const userIndex = users.findIndex(u => u.email.toLowerCase() === currentUser.email.toLowerCase());
+
+      if (userIndex !== -1) {
+        users[userIndex].username = username;
+        users[userIndex].email = email;
+        localStorage.setItem('stackly_users', JSON.stringify(users));
+
+        currentUser.username = username;
+        currentUser.email = email;
+        localStorage.setItem('stackly_currentUser', JSON.stringify(currentUser));
+        
+        alert('Profile details updated successfully! Reloading...');
+        window.location.reload();
+      } else {
+        alert('Failed to update details: User record not found.');
+      }
+    }
+
+    function savePasswordHandler() {
+      const currPass = document.getElementById('set-curr-pass').value;
+      const newPass = document.getElementById('set-new-pass').value;
+
+      if (!currentUser) return;
+
+      const users = JSON.parse(localStorage.getItem('stackly_users')) || [];
+      const user = users.find(u => u.email.toLowerCase() === currentUser.email.toLowerCase());
+
+      if (user) {
+        if (user.password !== currPass) {
+          alert('Current password verification failed.');
+          return;
+        }
+
+        user.password = newPass;
+        localStorage.setItem('stackly_users', JSON.stringify(users));
+        
+        document.getElementById('settings-security-form').reset();
+        alert('Password updated successfully!');
+      }
+    }
+
+    function toggleSystemTheme() {
+      const themeBtn = document.querySelector('.theme-toggle-btn');
+      if (themeBtn) {
+        themeBtn.click();
+      } else {
+        const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+        const nextTheme = currentTheme === 'dark' ? 'light' : 'dark';
+        document.documentElement.setAttribute('data-theme', nextTheme);
+        localStorage.setItem('stackly_theme', nextTheme);
+      }
+    }
+
+    function savePreferences() {
+      const prefs = {
+        sounds: document.getElementById('pref-sounds').checked,
+        emails: document.getElementById('pref-email').checked
+      };
+      localStorage.setItem('stackly_preferences', JSON.stringify(prefs));
+    }
+
+    function loadPreferences() {
+      const prefs = JSON.parse(localStorage.getItem('stackly_preferences')) || { sounds: true, emails: true };
+      document.getElementById('pref-sounds').checked = prefs.sounds;
+      document.getElementById('pref-email').checked = prefs.emails;
+    }
+  </script>
+</body>
+</html>

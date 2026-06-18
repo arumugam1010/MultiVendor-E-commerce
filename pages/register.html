@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Register - Stackly Marketplace</title>
+  <link rel="stylesheet" href="../css/styles.css">
+  <link rel="stylesheet" href="../css/animations.css">
+  <style>
+    .auth-wrapper {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+      padding: 2rem 1.25rem;
+    }
+    .auth-bg {
+      position: absolute;
+      inset: -10%;
+      background: radial-gradient(circle at 80% 20%, rgba(0, 240, 255, 0.15), transparent 50%),
+                  radial-gradient(circle at 20% 80%, rgba(138, 43, 226, 0.18), transparent 50%),
+                  linear-gradient(135deg, rgba(8, 10, 21, 0.92), rgba(4, 5, 12, 0.96)), 
+                  url('../assets/modules_bg.webp');
+      background-size: cover;
+      background-position: center;
+      animation: bgPan 25s ease-in-out infinite alternate;
+      z-index: 1;
+    }
+    @keyframes bgPan {
+      0% { transform: scale(1.05) translate(-10px, -10px); }
+      50% { transform: scale(1.1) translate(10px, 10px); }
+      100% { transform: scale(1.05) translate(-10px, -10px); }
+    }
+    .auth-card {
+      width: 100%;
+      max-width: 480px;
+      padding: 3rem 2.5rem;
+      border-radius: var(--radius-lg);
+      position: relative;
+      z-index: 2;
+    }
+    .back-home-btn-card {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 1rem;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 50px;
+      color: var(--text-primary);
+      font-family: var(--font-title);
+      font-weight: 600;
+      font-size: 0.85rem;
+      text-decoration: none;
+      transition: all var(--transition-fast);
+      box-sizing: border-box;
+    }
+    .back-home-btn-card:hover {
+      background: var(--primary-gradient);
+      border-color: transparent;
+      color: #ffffff !important;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 15px var(--primary-glow);
+    }
+    .back-home-btn-card svg {
+      width: 14px;
+      height: 14px;
+      transition: transform var(--transition-fast);
+    }
+    .back-home-btn-card:hover svg {
+      transform: translateX(-3px);
+    }
+    .auth-header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+    .auth-logo {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+    }
+    .auth-footer-links {
+      display: flex;
+      justify-content: center;
+      margin-top: 1.5rem;
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      gap: 0.5rem;
+    }
+    .auth-footer-links a:hover {
+      color: var(--secondary);
+    }
+    select.form-input {
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      appearance: none;
+      background-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSJ3aGl0ZSIgc3Ryb2tlLXdpZHRoPSIyIj48cGF0aCBkPSJNNiA5bDYgNiA2LTYiLz48L3N2Zz4=");
+      background-repeat: no-repeat;
+      background-position: right 1rem center;
+      background-size: 1.25rem;
+      padding-right: 2.5rem;
+    }
+    [data-theme="light"] select.form-input {
+      background-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSJibGFjayIgc3Ryb2tlLXdpZHRoPSIyIj48cGF0aCBkPSJNNiA5bDYgNiA2LTYiLz48L3N2Zz4=");
+    }
+  </style>
+</head>
+<body>
+  <!-- Loader -->
+  <stackly-loader></stackly-loader>
+
+  <div class="auth-wrapper">
+    <div class="auth-bg"></div>
+    <div class="glass glass-card auth-card">
+      <div class="auth-header">
+        <a href="../index.html" class="auth-logo">
+          <stackly-logo size="46"></stackly-logo>
+          <span style="font-family: var(--font-title); font-size: 2rem; font-weight: 800; color:var(--text-primary);">Stack<span style="background: var(--primary-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">ly</span></span>
+        </a>
+        <h2 style="font-size: 1.5rem; font-family: var(--font-title); margin-top: 0.5rem;">Access Registry</h2>
+        <p style="color: var(--text-secondary); font-size: 0.9rem;">Register a new cryptographic entity slot.</p>
+      </div>
+
+      <form id="registerForm">
+        <div class="form-group">
+          <label class="form-label" for="username">Username</label>
+          <div class="input-wrapper">
+            <input class="form-input" type="text" id="username" required placeholder="Nova Operator">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="email">Security Key (Email)</label>
+          <div class="input-wrapper">
+            <input class="form-input" type="email" id="email" required placeholder="nova@stackly.com">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="role">Node Role Entity</label>
+          <div class="input-wrapper">
+            <select class="form-input" id="role" required>
+              <option value="customer">Customer Node</option>
+              <option value="vendor">Vendor Node</option>
+              <option value="admin">Admin Node</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="grid grid-2" style="gap: 1rem;">
+          <div class="form-group">
+            <label class="form-label" for="password">Passcode</label>
+            <div class="input-wrapper">
+              <input class="form-input" type="password" id="password" required placeholder="••••••••">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="confirmPassword">Confirm Passcode</label>
+            <div class="input-wrapper">
+              <input class="form-input" type="password" id="confirmPassword" required placeholder="••••••••">
+            </div>
+          </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1rem;">Register Node</button>
+      </form>
+
+      <div class="auth-footer-links" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-top: 1.5rem;">
+        <a href="../index.html" class="back-home-btn-card">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
+          Back to Home
+        </a>
+        <div style="font-size: 0.85rem; display: flex; align-items: center; gap: 0.35rem;">
+          <span>Have node?</span>
+          <a href="login.html" style="font-weight: 600; color: var(--primary);">Sign In</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="../js/mockData.js"></script>
+  <script src="../js/components.js"></script>
+  <script src="../js/auth.js"></script>
+  <script src="../js/dashboard.js"></script>
+  <script>
+    // Grab query param role if specified (e.g. ?role=vendor)
+    const urlParams = new URLSearchParams(window.location.search);
+    const preselectedRole = urlParams.get('role');
+    if (preselectedRole) {
+      const select = document.getElementById('role');
+      if (select && ['customer', 'vendor', 'admin'].includes(preselectedRole)) {
+        select.value = preselectedRole;
+      }
+    }
+
+    document.getElementById('registerForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const username = document.getElementById('username').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const role = document.getElementById('role').value;
+      const password = document.getElementById('password').value;
+      const confirmPassword = document.getElementById('confirmPassword').value;
+
+      if (password !== confirmPassword) {
+        alert('Passwords do not match.');
+        return;
+      }
+
+      const result = StacklyAuth.register(username, email, password, role);
+
+      if (result.success) {
+        alert('Registration Successful! Node allocated.');
+        // Redirect to appropriate dashboard
+        if (role === 'admin') {
+          window.location.href = 'admin-dashboard.html';
+        } else if (role === 'vendor') {
+          window.location.href = 'vendor-dashboard.html';
+        } else {
+          window.location.href = 'customer-dashboard.html';
+        }
+      } else {
+        alert(result.message);
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Categories - Stackly Marketplace</title>
+  <link rel="stylesheet" href="../css/styles.css">
+  <link rel="stylesheet" href="../css/animations.css">
+  <style>
+    /* Section background with categories_hero_bg.png */
+    .categories-section-with-bg {
+      background: linear-gradient(180deg, rgba(238, 242, 247, 0.75) 0%, var(--bg-base) 100%), 
+                  url('../assets/categories_hero_bg.png') no-repeat center center;
+      background-size: cover;
+      background-attachment: fixed;
+      padding-top: 4rem;
+      padding-bottom: 4rem;
+      position: relative;
+    }
+    
+    [data-theme="dark"] .categories-section-with-bg {
+      background: linear-gradient(180deg, rgba(7, 9, 19, 0.8) 0%, var(--bg-base) 100%), 
+                  url('../assets/categories_hero_bg.png') no-repeat center center;
+      background-size: cover;
+      background-attachment: fixed;
+    }
+
+    /* Category Cards styling with real images */
+    .cat-grid-card {
+      padding: 0 !important;
+      overflow: hidden;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      border-radius: var(--radius-md);
+      transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.4s ease, box-shadow 0.4s ease;
+      background: rgba(255, 255, 255, 0.75) !important;
+      border: 1px solid rgba(0, 0, 0, 0.08) !important;
+      position: relative;
+    }
+    [data-theme="dark"] .cat-grid-card {
+      background: rgba(21, 26, 48, 0.5) !important;
+      border: 1px solid rgba(255, 255, 255, 0.08) !important;
+    }
+    .cat-grid-card:hover {
+      transform: translateY(-8px) scale(1.02);
+      border-color: var(--primary);
+      box-shadow: 0 20px 40px rgba(0, 240, 255, 0.15);
+    }
+    .cat-grid-image-wrapper {
+      width: 100%;
+      height: 200px;
+      overflow: hidden;
+      position: relative;
+      background: var(--bg-surface-alt);
+      border-bottom: 1px solid var(--border-color);
+    }
+    .cat-grid-card-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .cat-grid-card:hover .cat-grid-card-img {
+      transform: scale(1.1) rotate(1deg);
+    }
+    .cat-grid-card-details {
+      padding: 1.5rem;
+      text-align: left;
+      display: flex;
+      flex-direction: column;
+      flex-grow: 1;
+      gap: 0.5rem;
+    }
+    .cat-grid-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: var(--radius-md);
+      padding: 1px;
+      background: linear-gradient(135deg, transparent, transparent);
+      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+      pointer-events: none;
+      transition: background 0.3s ease;
+    }
+    .cat-grid-card:hover::before {
+      background: var(--primary-gradient);
+    }
+    [data-theme="dark"] .cat-grid-card:hover::before {
+      background: var(--accent-gradient);
+    }
+  </style>
+</head>
+
+<body>
+  <stackly-loader></stackly-loader>
+  <stackly-header></stackly-header>
+
+  <main>
+    <section class="section reveal-on-scroll categories-section-with-bg" style="padding-bottom: 3rem;">
+      <div class="container">
+        <div class="section-header fade-in">
+          <span class="badge badge-primary" style="margin-bottom: 1rem;">DECENTRALIZED BROWSE</span>
+          <h2>Explore Core Categories</h2>
+          <p>Sift through catalog items grouped by specific platform channels.</p>
+        </div>
+
+        <div class="form-group fade-in" style="max-width: 500px; margin: 0 auto 3rem auto; position: relative;">
+          <span
+            style="position: absolute; left: 1.25rem; top: 50%; transform: translateY(-50%); font-size: 1.1rem; pointer-events: none;">🔍</span>
+          <input type="text" id="category-search-input" class="form-input"
+            placeholder="Search categories (e.g., Electronics, Fashion)..."
+            style="padding-left: 3rem; border-radius: 50px;">
+        </div>
+
+        <div class="grid grid-3" id="categories-catalog-container">
+          <!-- Populated by JS -->
+        </div>
+      </div>
+    </section>
+
+    <!-- Spotlight Category Banner Section -->
+    <section class="reveal-on-scroll" style="padding-top: 0; padding-bottom: 4rem;">
+      <div class="container">
+        <div class="glass glass-card"
+          style="padding: 3rem; background: radial-gradient(circle at top right, rgba(0, 240, 255, 0.1), transparent 50%), var(--card-gradient); border: 1px solid rgba(40, 116, 240, 0.25);">
+          <div class="grid grid-2" style="align-items: center; gap: 3rem;">
+            <div>
+              <span class="badge badge-accent" style="margin-bottom: 1rem;">SPOTLIGHT CATEGORY</span>
+              <h2 style="font-size: 2.2rem; font-family: var(--font-title); margin-bottom: 1rem;">Futuristic Home &
+                Living</h2>
+              <p style="color: var(--text-secondary); line-height: 1.7; margin-bottom: 1.5rem;">
+                Transform your workspace or residential space with zero-gravity ergonomic chairs, high-precision
+                espresso machinery, and smart ambient setups. This week, get up to 25% off verified vendor setups.
+              </p>
+              <div style="display: flex; gap: 1rem; align-items: center; margin-bottom: 2rem;">
+                <span class="badge badge-success">25% Max Discount</span>
+                <span class="badge badge-primary">920+ Active Listings</span>
+              </div>
+              <a href="products.html?category=home" class="btn btn-primary">Browse Home & Living</a>
+            </div>
+            <div style="position: relative; display: flex; justify-content: center; align-items: center;">
+              <!-- Visual highlight -->
+              <div class="glass"
+                style="padding: 2.5rem 2rem; border-radius: var(--radius-lg); text-align: center; max-width: 380px; box-shadow: 0 15px 35px rgba(0,240,255,0.15); border: 1px solid rgba(255, 194, 0, 0.2); width: 100%;">
+                <div
+                  style="font-size: 4.5rem; margin-bottom: 1rem; animation: float 6s ease-in-out infinite; display: inline-block;">
+                  🏠</div>
+                <h3
+                  style="font-size: 1.25rem; font-family: var(--font-title); margin-bottom: 0.5rem; color: var(--text-primary);">
+                  Nebula Pod Setup</h3>
+                <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 1rem;">Integrated smart console +
+                  ergonomic support systems</p>
+                <div style="font-weight: 700; font-size: 1.5rem; color: var(--accent); margin-bottom: 1.25rem;">$450.00
+                  <span
+                    style="font-size: 0.9rem; text-decoration: line-through; color: var(--text-muted);">$475.00</span>
+                </div>
+                <button class="btn btn-accent" onclick="window.location.href='products.html?category=home'"
+                  style="padding: 0.5rem 1.2rem; font-size: 0.9rem; width: 100%;">View Collection</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Curated Collections Section -->
+    <section class="reveal-on-scroll"
+      style="padding-top: 0; padding-bottom: 4rem; background: rgba(255, 255, 255, 0.01);">
+      <div class="container">
+        <div class="section-header">
+          <span class="badge badge-secondary" style="margin-bottom: 1rem;">CURATED MIXES</span>
+          <h2>Specialty Micro-Collections</h2>
+          <p>Sourced and assembled by Stackly developers for custom workspace aesthetics and style paradigms.</p>
+        </div>
+
+        <div class="grid grid-3">
+          <!-- Collection 1 -->
+          <div class="glass glass-card" style="display: flex; flex-direction: column; gap: 1.25rem;">
+            <div style="font-size: 2.2rem; color: var(--primary);">🌌</div>
+            <div>
+              <h3 style="font-size: 1.25rem; font-family: var(--font-title); margin-bottom: 0.5rem;">Cyberpunk
+                Essentials</h3>
+              <p style="color: var(--text-secondary); font-size: 0.92rem; line-height: 1.6;">
+                Vibrant RGB components, mechanical keys, and glowing attire to fit your nighttime terminal aesthetic.
+              </p>
+            </div>
+            <a href="products.html" class="text-gradient"
+              style="font-size: 0.9rem; font-weight: 600; margin-top: auto; display: inline-flex; align-items: center; gap: 0.25rem;">
+              Explore Concept →
+            </a>
+          </div>
+
+          <!-- Collection 2 -->
+          <div class="glass glass-card" style="display: flex; flex-direction: column; gap: 1.25rem;">
+            <div style="font-size: 2.2rem; color: var(--secondary);">⚡</div>
+            <div>
+              <h3 style="font-size: 1.25rem; font-family: var(--font-title); margin-bottom: 0.5rem;">High-Power
+                Workflows</h3>
+              <p style="color: var(--text-secondary); font-size: 0.92rem; line-height: 1.6;">
+                Premium carbon processing units, high-fidelity noise-blocking headphones, and next-day logistical
+                delivery.
+              </p>
+            </div>
+            <a href="products.html" class="text-gradient"
+              style="font-size: 0.9rem; font-weight: 600; margin-top: auto; display: inline-flex; align-items: center; gap: 0.25rem;">
+              Explore Concept →
+            </a>
+          </div>
+
+          <!-- Collection 3 -->
+          <div class="glass glass-card" style="display: flex; flex-direction: column; gap: 1.25rem;">
+            <div style="font-size: 2.2rem; color: var(--accent);">🔋</div>
+            <div>
+              <h3 style="font-size: 1.25rem; font-family: var(--font-title); margin-bottom: 0.5rem;">Active Sports Tech
+              </h3>
+              <p style="color: var(--text-secondary); font-size: 0.92rem; line-height: 1.6;">
+                Zero-gravity sneakers, bio-sensor smart chronographs, and outdoor gear engineered for maximum endurance.
+              </p>
+            </div>
+            <a href="products.html" class="text-gradient"
+              style="font-size: 0.9rem; font-weight: 600; margin-top: auto; display: inline-flex; align-items: center; gap: 0.25rem;">
+              Explore Concept →
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Request Category Module Section -->
+    <section class="reveal-on-scroll" style="padding-top: 0; padding-bottom: 4rem;">
+      <div class="container" style="max-width: 800px;">
+        <div class="glass glass-card" style="padding: 3rem; text-align: center;">
+          <h2 style="font-size: 1.8rem; font-family: var(--font-title); margin-bottom: 0.75rem;">Request a Custom Module
+          </h2>
+          <p
+            style="color: var(--text-secondary); font-size: 0.95rem; margin-bottom: 2rem; max-width: 550px; margin-left: auto; margin-right: auto;">
+            Don't see your specialized commercial channel here? Submit a proposal to register a new category node on
+            Stackly's catalog ledger.
+          </p>
+          <form id="category-request-form" style="display: flex; flex-direction: column; gap: 1rem;"
+            onsubmit="event.preventDefault(); handleCategoryRequest(this);">
+            <div class="grid grid-2" style="gap: 1rem; text-align: left;">
+              <div class="form-group" style="margin-bottom: 0;">
+                <label class="form-label">Category Name</label>
+                <input type="text" class="form-input" placeholder="e.g. Toys & Games" required>
+              </div>
+              <div class="form-group" style="margin-bottom: 0;">
+                <label class="form-label">Suggested Icon / Emoji</label>
+                <input type="text" class="form-input" placeholder="e.g. 🧸" required>
+              </div>
+            </div>
+            <div class="form-group" style="text-align: left; margin-bottom: 1.5rem;">
+              <label class="form-label">Module Justification & Details</label>
+              <textarea class="form-input"
+                placeholder="Describe the commercial listings that will benefit from this category node..." required
+                style="min-height: 80px;"></textarea>
+            </div>
+            <button type="submit" class="btn btn-secondary" style="align-self: center; padding: 0.75rem 2rem;">Submit
+              Module Request</button>
+          </form>
+          <div id="category-request-success"
+            style="display: none; padding: 2rem 0; color: var(--success); text-align: center;">
+            <div style="font-size: 3rem; margin-bottom: 0.5rem;">✓</div>
+            <h3
+              style="font-size: 1.25rem; font-family: var(--font-title); margin-bottom: 0.25rem; color: var(--success);">
+              Proposal Node Registered!</h3>
+            <p style="font-size: 0.9rem; color: var(--text-secondary);">Your request for "<span
+                id="submitted-cat-name"></span>" has been cataloged. Stackly admins will review the entry soon.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <stackly-footer></stackly-footer>
+
+  <script src="../js/mockData.js"></script>
+  <script src="../js/components.js"></script>
+  <script src="../js/dashboard.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const db = window.StacklyDB;
+      const container = document.getElementById('categories-catalog-container');
+
+      const categoryImages = {
+        electronics: 'assets/laptop.webp',
+        fashion: 'assets/jacket.webp',
+        home: 'assets/chair.webp',
+        sports: 'assets/shoes.webp',
+        books: 'assets/category_books.webp',
+        beauty: 'assets/category_beauty.webp'
+      };
+
+      if (db && container) {
+        container.innerHTML = db.getCategories().map(cat => {
+          const catImg = adjustImagePath(categoryImages[cat.id] || 'assets/new_product.webp');
+          return `
+            <div class="glass glass-card cat-grid-card" onclick="window.location.href='products.html?category=${cat.id}'">
+              <div class="cat-grid-image-wrapper">
+                <img class="cat-grid-card-img" src="${catImg}" alt="${cat.name}">
+              </div>
+              <div class="cat-grid-card-details">
+                <h3 style="font-size: 1.4rem; font-family: var(--font-title); font-weight: 600; margin-bottom: 0.25rem;">${cat.name}</h3>
+                <p style="color: var(--text-secondary); font-size: 0.95rem; line-height: 1.6; margin-bottom: 0.75rem;">
+                  Access active listings catalogued under the ${cat.name} module.
+                </p>
+                <div style="margin-top: auto;">
+                  <span class="badge badge-secondary">${cat.count} Listings</span>
+                </div>
+              </div>
+            </div>
+          `;
+        }).join('');
+      }
+
+      // Live search filter
+      const searchInput = document.getElementById('category-search-input');
+      if (searchInput && container) {
+        searchInput.addEventListener('input', (e) => {
+          const query = e.target.value.toLowerCase().trim();
+          const cards = container.querySelectorAll('.cat-grid-card');
+          cards.forEach(card => {
+            const name = card.querySelector('h3').textContent.toLowerCase();
+            const desc = card.querySelector('p').textContent.toLowerCase();
+            if (name.includes(query) || desc.includes(query)) {
+              card.style.display = '';
+            } else {
+              card.style.display = 'none';
+            }
+          });
+        });
+      }
+    });
+
+    function handleCategoryRequest(form) {
+      const catName = form.querySelector('input[type="text"]').value;
+      document.getElementById('category-request-form').style.display = 'none';
+      document.getElementById('submitted-cat-name').innerText = catName;
+      document.getElementById('category-request-success').style.display = 'block';
+    }
+  </script>
+</body>
+
+</html>

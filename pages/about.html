@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About Us - Stackly Marketplace</title>
+  <link rel="stylesheet" href="../css/styles.css">
+  <link rel="stylesheet" href="../css/animations.css">
+  <style>
+    .about-hero {
+      background: linear-gradient(180deg, rgba(238, 242, 247, 0.75) 0%, var(--bg-base) 100%), 
+                  url('../assets/categories_hero_bg.png') no-repeat center center;
+      background-size: cover;
+      background-attachment: fixed;
+      padding: 6rem 0;
+      text-align: center;
+      position: relative;
+    }
+    
+    [data-theme="dark"] .about-hero {
+      background: linear-gradient(180deg, rgba(7, 9, 19, 0.8) 0%, var(--bg-base) 100%), 
+                  url('../assets/categories_hero_bg.png') no-repeat center center;
+      background-size: cover;
+      background-attachment: fixed;
+    }
+  </style>
+</head>
+<body>
+  <stackly-loader></stackly-loader>
+  <stackly-header></stackly-header>
+
+  <main>
+    <section class="about-hero">
+      <div class="container fade-in">
+        <span class="badge badge-primary" style="margin-bottom: 1rem;">OUR ORIGIN</span>
+        <h1 style="font-size: 3rem; font-family: var(--font-title); margin-bottom: 1rem;">Stacking the Future of Trade</h1>
+        <p style="color: var(--text-secondary); max-width: 600px; margin: 0 auto; line-height: 1.6;">Stackly is a high-performance multi-vendor marketplace designed to give independent vendors and consumers a smooth, premium, decentralized commerce engine.</p>
+      </div>
+    </section>
+
+    <section class="reveal-on-scroll" style="padding-top: 0; padding-bottom: 4rem;">
+      <div class="container">
+        <div class="grid grid-2" style="align-items: center; gap: 4rem;">
+          <div class="glass glass-card" style="padding: 3rem;">
+            <h2 style="font-size: 2.2rem; margin-bottom: 1.25rem; font-family: var(--font-title); color: var(--text-primary);">Core Philosophy</h2>
+            <p style="color: var(--text-secondary); line-height: 1.8; margin-bottom: 1rem;">
+              We believe commerce should feel responsive, premium, and seamless. By stripping away heavy frameworks, we ensure that every interaction, hover transition, and check-out runs instantly.
+            </p>
+            <p style="color: var(--text-secondary); line-height: 1.8;">
+              Our platform operates on a decentralized localized database structure using LocalStorage tokens to secure identities, purchase records, and shopping catalogs for a private-first client experience.
+            </p>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 2rem;">
+            <div class="glass glass-card" style="display: flex; gap: 1.5rem; padding: 1.5rem;">
+              <div style="font-size: 2rem; color: var(--primary);">✦</div>
+              <div>
+                <h3 style="font-size: 1.15rem; font-family: var(--font-title); margin-bottom: 0.25rem; color: var(--text-primary);">Ultra-High Performance</h3>
+                <p style="color: var(--text-secondary); font-size: 0.9rem;">Runs entirely on vanilla micro-scripts and optimized assets, ensuring instantaneous render cycles.</p>
+              </div>
+            </div>
+            <div class="glass glass-card" style="display: flex; gap: 1.5rem; padding: 1.5rem;">
+              <div style="font-size: 2rem; color: var(--primary);">⚡</div>
+              <div>
+                <h3 style="font-size: 1.15rem; font-family: var(--font-title); margin-bottom: 0.25rem; color: var(--text-primary);">Secured Local Channels</h3>
+                <p style="color: var(--text-secondary); font-size: 0.9rem;">No tracking cookies. Active shopping items are saved securely in user-controlled nodes.</p>
+              </div>
+            </div>
+            <div class="glass glass-card" style="display: flex; gap: 1.5rem; padding: 1.5rem;">
+              <div style="font-size: 2rem; color: var(--accent);">✶</div>
+              <div>
+                <h3 style="font-size: 1.15rem; font-family: var(--font-title); margin-bottom: 0.25rem; color: var(--text-primary);">Harmonious Visuals</h3>
+                <p style="color: var(--text-secondary); font-size: 0.9rem;">Modern glassmorphism gradients styled dynamically to provide a comforting dark and light visual aesthetic.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Live Growth Stats Section -->
+    <section class="reveal-on-scroll" style="padding-top: 0; padding-bottom: 4rem;">
+      <div class="container">
+        <div class="glass" style="padding: 3rem; background: var(--dark-gradient); border: 1px solid var(--border-color);">
+          <div class="grid grid-3" style="text-align: center; gap: 2rem;">
+            <div>
+              <div style="font-size: 3rem; font-family: var(--font-title); font-weight: 800; color: var(--primary); margin-bottom: 0.5rem;">52,480+</div>
+              <h4 style="font-size: 1rem; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.05em;">Active Local Nodes</h4>
+            </div>
+            <div style="border-left: 1px solid var(--border-color); border-right: 1px solid var(--border-color);">
+              <div style="font-size: 3rem; font-family: var(--font-title); font-weight: 800; color: var(--secondary); margin-bottom: 0.5rem;">$12.8M</div>
+              <h4 style="font-size: 1rem; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.05em;">Transacted Volume</h4>
+            </div>
+            <div>
+              <div style="font-size: 3rem; font-family: var(--font-title); font-weight: 800; color: var(--success); margin-bottom: 0.5rem;">99.99%</div>
+              <h4 style="font-size: 1rem; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.05em;">Uptime SLA Ledger</h4>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Interactive Milestone Timeline Section -->
+    <section class="reveal-on-scroll" style="padding-top: 0; padding-bottom: 4rem;">
+      <div class="container" style="max-width: 800px;">
+        <div class="section-header">
+          <span class="badge badge-primary" style="margin-bottom: 1rem;">OUR HISTORICAL LEDGER</span>
+          <h2>Platform Milestones</h2>
+          <p>Chronological journey of our decentralized commercial suite from concept to execution.</p>
+        </div>
+        
+        <div style="display: flex; flex-direction: column; gap: 2rem; position: relative;">
+          <!-- Timeline Center Line -->
+          <div style="position: absolute; left: 20px; top: 10px; bottom: 10px; width: 2px; background: var(--border-color); z-index: 1;"></div>
+          
+          <!-- Milestone 1 -->
+          <div style="display: flex; gap: 2rem; position: relative; z-index: 2;">
+            <div style="width: 42px; height: 42px; border-radius: 50%; background: var(--primary-gradient); display: flex; align-items: center; justify-content: center; color: #fff; font-weight: 800; font-size: 0.9rem; flex-shrink: 0; box-shadow: 0 0 10px var(--primary-glow);">01</div>
+            <div class="glass" style="padding: 1.5rem; flex-grow: 1; border: 1px solid var(--border-color); border-radius: var(--radius-md);">
+              <span style="font-size: 0.8rem; font-weight: 700; color: var(--primary); text-transform: uppercase;">Q1 2024 - Blueprint phase</span>
+              <h3 style="font-size: 1.2rem; font-family: var(--font-title); margin: 0.25rem 0; color: var(--text-primary);">The Conception</h3>
+              <p style="color: var(--text-secondary); font-size: 0.9rem; line-height: 1.6;">Four stack engineers propose a framework-free vanilla marketplace utilizing localized cookie tokens to bypass database bottlenecks.</p>
+            </div>
+          </div>
+
+          <!-- Milestone 2 -->
+          <div style="display: flex; gap: 2rem; position: relative; z-index: 2;">
+            <div style="width: 42px; height: 42px; border-radius: 50%; background: var(--accent-gradient); display: flex; align-items: center; justify-content: center; color: #fff; font-weight: 800; font-size: 0.9rem; flex-shrink: 0; box-shadow: 0 0 10px rgba(251, 100, 27, 0.3);">02</div>
+            <div class="glass" style="padding: 1.5rem; flex-grow: 1; border: 1px solid var(--border-color); border-radius: var(--radius-md);">
+              <span style="font-size: 0.8rem; font-weight: 700; color: var(--accent); text-transform: uppercase;">Q3 2025 - Micro-Node Launch</span>
+              <h3 style="font-size: 1.2rem; font-family: var(--font-title); margin: 0.25rem 0; color: var(--text-primary);">Beta Release</h3>
+              <p style="color: var(--text-secondary); font-size: 0.9rem; line-height: 1.6;">Launch of local inventory caches. Initial 150 verified merchants register to list goods via secure escrow nodes.</p>
+            </div>
+          </div>
+
+          <!-- Milestone 3 -->
+          <div style="display: flex; gap: 2rem; position: relative; z-index: 2;">
+            <div style="width: 42px; height: 42px; border-radius: 50%; background: var(--primary-gradient); display: flex; align-items: center; justify-content: center; color: #fff; font-weight: 800; font-size: 0.9rem; flex-shrink: 0; box-shadow: 0 0 10px var(--primary-glow);">03</div>
+            <div class="glass" style="padding: 1.5rem; flex-grow: 1; border: 1px solid var(--border-color); border-radius: var(--radius-md);">
+              <span style="font-size: 0.8rem; font-weight: 700; color: var(--secondary); text-transform: uppercase;">Q2 2026 - Going Global</span>
+              <h3 style="font-size: 1.2rem; font-family: var(--font-title); margin: 0.25rem 0; color: var(--text-primary);">The Neon Era</h3>
+              <p style="color: var(--text-secondary); font-size: 0.9rem; line-height: 1.6;">Redesigned using advanced glassmorphic styling, live stats nodes, automated APIs, and regional distribution partners.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Leadership Profiles Section -->
+    <section class="reveal-on-scroll" style="padding-top: 0; padding-bottom: 4rem;">
+      <div class="container">
+        <div class="section-header">
+          <span class="badge badge-accent" style="margin-bottom: 1rem;">THE ARCHITECTS</span>
+          <h2>Meet the Core Contributors</h2>
+          <p>The engineering minds behind Stackly's micro-script core and decentralized ledger.</p>
+        </div>
+
+        <div class="grid grid-3">
+          <!-- Contributor 1 -->
+          <div class="glass glass-card" style="text-align: center; padding: 3rem 2rem;">
+            <div style="width: 100px; height: 100px; border-radius: 50%; border: 3px solid var(--primary); display: flex; align-items: center; justify-content: center; font-size: 2.2rem; font-weight: 800; color: var(--primary); margin: 0 auto 1.5rem auto; background: var(--bg-surface-alt);">EW</div>
+            <h3 style="font-size: 1.35rem; font-family: var(--font-title); margin-bottom: 0.25rem; color: var(--text-primary);">Dr. Evelyn Wright</h3>
+            <span style="font-size: 0.8rem; color: var(--accent); font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; display: block; margin-bottom: 1rem;">Chief Cryptographer</span>
+            <p style="color: var(--text-secondary); font-size: 0.9rem; line-height: 1.6;">Designed the SecureEscrow node protocols and LocalStorage catalog token mapping systems.</p>
+          </div>
+
+          <!-- Contributor 2 -->
+          <div class="glass glass-card" style="text-align: center; padding: 3rem 2rem;">
+            <div style="width: 100px; height: 100px; border-radius: 50%; border: 3px solid var(--secondary); display: flex; align-items: center; justify-content: center; font-size: 2.2rem; font-weight: 800; color: var(--secondary); margin: 0 auto 1.5rem auto; background: var(--bg-surface-alt);">LC</div>
+            <h3 style="font-size: 1.35rem; font-family: var(--font-title); margin-bottom: 0.25rem; color: var(--text-primary);">Liam Carter</h3>
+            <span style="font-size: 0.8rem; color: var(--accent); font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; display: block; margin-bottom: 1rem;">Lead Design Synthesizer</span>
+            <p style="color: var(--text-secondary); font-size: 0.9rem; line-height: 1.6;">Engineered the glassmorphic aesthetics, HSL color tokens, and web component library integration.</p>
+          </div>
+
+          <!-- Contributor 3 -->
+          <div class="glass glass-card" style="text-align: center; padding: 3rem 2rem;">
+            <div style="width: 100px; height: 100px; border-radius: 50%; border: 3px solid var(--primary); display: flex; align-items: center; justify-content: center; font-size: 2.2rem; font-weight: 800; color: var(--primary); margin: 0 auto 1.5rem auto; background: var(--bg-surface-alt);">MK</div>
+            <h3 style="font-size: 1.35rem; font-family: var(--font-title); margin-bottom: 0.25rem; color: var(--text-primary);">Miko Kusanagi</h3>
+            <span style="font-size: 0.8rem; color: var(--accent); font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; display: block; margin-bottom: 1rem;">Logistical Architect</span>
+            <p style="color: var(--text-secondary); font-size: 0.9rem; line-height: 1.6;">Connected regional distribution warehouses with auto-routing API pipelines for next-day shipping.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section class="reveal-on-scroll" style="padding-top: 0; padding-bottom: 4rem;">
+      <div class="container">
+        <div class="section-header">
+          <span class="badge badge-secondary" style="margin-bottom: 1rem;">TRUST FACTOR</span>
+          <h2>Sellers Sharing Success</h2>
+          <p>Hear from independent vendors scaling their local channels via Stackly Ecosystems.</p>
+        </div>
+
+        <div class="grid grid-2">
+          <div class="glass glass-card" style="padding: 2.5rem; display: flex; flex-direction: column; justify-content: space-between;">
+            <p style="color: var(--text-secondary); font-size: 1rem; line-height: 1.8; font-style: italic; margin-bottom: 1.5rem;">
+              "Integrating Stackly Express warehousing cut our processing times in half. We no longer struggle with server latency during flash campaign drop hours. Our customers love the instant escrow checkouts."
+            </p>
+            <div style="display: flex; align-items: center; gap: 1rem;">
+              <div style="width: 46px; height: 46px; border-radius: 50%; background: var(--primary); display: flex; align-items: center; justify-content: center; color: #fff; font-weight: 700;">AM</div>
+              <div>
+                <h4 style="font-size: 0.95rem; font-family: var(--font-title); color: var(--text-primary); margin: 0;">Arthur Morgan</h4>
+                <span style="font-size: 0.75rem; color: var(--text-muted);">Founder, Aura Fashion House</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="glass glass-card" style="padding: 2.5rem; display: flex; flex-direction: column; justify-content: space-between;">
+            <p style="color: var(--text-secondary); font-size: 1rem; line-height: 1.8; font-style: italic; margin-bottom: 1.5rem;">
+              "Stackly API endpoints integrated directly into our custom backend pipeline in under two hours. The developer dashboard statistics make sales trends so transparent. Professional tier is worth every cent."
+            </p>
+            <div style="display: flex; align-items: center; gap: 1rem;">
+              <div style="width: 46px; height: 46px; border-radius: 50%; background: var(--secondary); display: flex; align-items: center; justify-content: center; color: #000; font-weight: 700;">NT</div>
+              <div>
+                <h4 style="font-size: 0.95rem; font-family: var(--font-title); color: var(--text-primary); margin: 0;">Nathan Drake</h4>
+                <span style="font-size: 0.75rem; color: var(--text-muted);">Manager, NovaTech Enterprises</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <stackly-footer></stackly-footer>
+
+  <script src="../js/mockData.js"></script>
+  <script src="../js/components.js"></script>
+  <script src="../js/dashboard.js"></script>
+</body>
+</html>

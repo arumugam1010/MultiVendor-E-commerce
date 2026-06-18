@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Module Under Development - 404 Stackly</title>
+  <link rel="stylesheet" href="../css/styles.css">
+  <link rel="stylesheet" href="../css/animations.css">
+  <style>
+    .error-wrapper {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: #ffffff;
+      padding: 2rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .error-code {
+      font-size: 8rem;
+      font-weight: 800;
+      font-family: var(--font-title);
+      background: var(--primary-gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      line-height: 1;
+      margin-bottom: 1rem;
+      animation: float 4s ease-in-out infinite;
+      position: relative;
+      z-index: 2;
+    }
+    .error-card {
+      max-width: 500px;
+      padding: 3rem 2rem;
+      border-radius: var(--radius-lg);
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+      position: relative;
+      z-index: 2;
+    }
+    .error-title {
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+    .error-desc {
+      color: var(--text-secondary);
+      font-size: 0.95rem;
+      line-height: 1.6;
+    }
+    .error-actions {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      margin-top: 1rem;
+    }
+
+    /* E-commerce Animated Graphic */
+    .cart-animation-container {
+      position: relative;
+      width: 250px;
+      height: 180px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-end;
+      overflow: hidden;
+      background: rgba(0, 0, 0, 0.02);
+      border-radius: var(--radius-md);
+      border: 1px dashed rgba(0, 0, 0, 0.1);
+      padding: 1rem;
+    }
+    
+    .animated-cart {
+      color: var(--primary);
+      width: 65px;
+      height: 65px;
+      filter: drop-shadow(0 0 10px var(--primary-glow));
+      animation: cart-bounce 0.8s ease-in-out infinite alternate;
+      z-index: 2;
+      margin-bottom: 2px;
+    }
+    
+    .cart-svg {
+      width: 100%;
+      height: 100%;
+    }
+    
+    .road-line {
+      width: 180px;
+      height: 3px;
+      background: linear-gradient(90deg, transparent, var(--border-color) 20%, var(--border-color) 80%, transparent);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .road-line::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 200%;
+      height: 100%;
+      background: repeating-linear-gradient(90deg, transparent, transparent 10px, var(--secondary) 10px, var(--secondary) 20px);
+      animation: road-scroll 0.8s linear infinite;
+      opacity: 0.5;
+    }
+    
+    .floating-items {
+      position: absolute;
+      bottom: 75px;
+      width: 100%;
+      height: 100px;
+      pointer-events: none;
+    }
+    
+    .float-item {
+      position: absolute;
+      bottom: 0;
+      font-size: 1.6rem;
+      opacity: 0;
+      filter: drop-shadow(0 0 8px rgba(138, 43, 226, 0.4));
+    }
+    
+    .item-box {
+      left: 35%;
+      animation: float-up-1 2.8s ease-in-out infinite;
+      animation-delay: 0s;
+    }
+    
+    .item-phone {
+      left: 45%;
+      animation: float-up-2 2.8s ease-in-out infinite;
+      animation-delay: 0.7s;
+    }
+    
+    .item-shirt {
+      left: 55%;
+      animation: float-up-3 2.8s ease-in-out infinite;
+      animation-delay: 1.4s;
+    }
+    
+    .item-tag {
+      left: 40%;
+      animation: float-up-4 2.8s ease-in-out infinite;
+      animation-delay: 2.1s;
+    }
+    
+    /* Animations */
+    @keyframes cart-bounce {
+      0% {
+        transform: translateY(0) rotate(0deg);
+      }
+      50% {
+        transform: translateY(-5px) rotate(-1.5deg);
+      }
+      100% {
+        transform: translateY(2px) rotate(1.5deg);
+      }
+    }
+    
+    @keyframes road-scroll {
+      0% {
+        transform: translateX(0);
+      }
+      100% {
+        transform: translateX(-20px);
+      }
+    }
+    
+    @keyframes float-up-1 {
+      0% {
+        transform: translate(0, 25px) scale(0.5) rotate(0deg);
+        opacity: 0;
+      }
+      20% {
+        opacity: 1;
+      }
+      80% {
+        opacity: 0.8;
+      }
+      100% {
+        transform: translate(-35px, -85px) scale(1.1) rotate(-50deg);
+        opacity: 0;
+      }
+    }
+    
+    @keyframes float-up-2 {
+      0% {
+        transform: translate(0, 25px) scale(0.5) rotate(0deg);
+        opacity: 0;
+      }
+      20% {
+        opacity: 1;
+      }
+      80% {
+        opacity: 0.8;
+      }
+      100% {
+        transform: translate(20px, -95px) scale(1.1) rotate(40deg);
+        opacity: 0;
+      }
+    }
+    
+    @keyframes float-up-3 {
+      0% {
+        transform: translate(0, 25px) scale(0.5) rotate(0deg);
+        opacity: 0;
+      }
+      20% {
+        opacity: 1;
+      }
+      80% {
+        opacity: 0.8;
+      }
+      100% {
+        transform: translate(-15px, -90px) scale(1.1) rotate(-30deg);
+        opacity: 0;
+      }
+    }
+    
+    @keyframes float-up-4 {
+      0% {
+        transform: translate(0, 25px) scale(0.5) rotate(0deg);
+        opacity: 0;
+      }
+      20% {
+        opacity: 1;
+      }
+      80% {
+        opacity: 0.8;
+      }
+      100% {
+        transform: translate(30px, -80px) scale(1.1) rotate(50deg);
+        opacity: 0;
+      }
+    }
+
+    /* Animated Logistics Background */
+    .logistics-bg-container {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+      pointer-events: none;
+      overflow: hidden;
+    }
+    
+    .grid-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: 
+        radial-gradient(rgba(0, 0, 0, 0.04) 1px, transparent 1px),
+        radial-gradient(rgba(0, 0, 0, 0.04) 1px, transparent 1px);
+      background-size: 50px 50px;
+      background-position: 0 0, 25px 25px;
+      opacity: 0.6;
+    }
+
+    .logistics-routes {
+      width: 100%;
+      height: 100%;
+      opacity: 0.45;
+    }
+
+    @keyframes gradientShift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+  </style>
+</head>
+<body>
+  <!-- Loader -->
+  <stackly-loader></stackly-loader>
+
+  <div class="error-wrapper">
+    <!-- Animated Logistics Background -->
+    <div class="logistics-bg-container">
+      <div class="grid-overlay"></div>
+      <svg class="logistics-routes" viewBox="0 0 1000 1000" preserveAspectRatio="xMidYMid slice">
+        <defs>
+          <!-- Gradients for paths -->
+          <linearGradient id="route-grad-A" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#2874f0" stop-opacity="0.4"/>
+            <stop offset="100%" stop-color="#ffc200" stop-opacity="0.4"/>
+          </linearGradient>
+          <linearGradient id="route-grad-B" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#ffc200" stop-opacity="0.4"/>
+            <stop offset="100%" stop-color="#fb641b" stop-opacity="0.4"/>
+          </linearGradient>
+          <linearGradient id="route-grad-C" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#fb641b" stop-opacity="0.4"/>
+            <stop offset="100%" stop-color="#00f0ff" stop-opacity="0.4"/>
+          </linearGradient>
+          <linearGradient id="route-grad-D" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#00f0ff" stop-opacity="0.4"/>
+            <stop offset="100%" stop-color="#2874f0" stop-opacity="0.4"/>
+          </linearGradient>
+          
+          <filter id="glow-light" x="-50%" y="-50%" width="200%" height="200%">
+            <feGaussianBlur stdDeviation="5" result="blur" />
+            <feMerge>
+              <feMergeNode in="blur" />
+              <feMergeNode in="SourceGraphic" />
+            </feMerge>
+          </filter>
+        </defs>
+        
+        <!-- Network Paths -->
+        <path id="pathA" d="M200,150 Q300,300 500,500" fill="none" stroke="url(#route-grad-A)" stroke-width="2" stroke-dasharray="6,6" />
+        <path id="pathB" d="M500,500 Q650,400 800,250" fill="none" stroke="url(#route-grad-B)" stroke-width="2" stroke-dasharray="6,6" />
+        <path id="pathC" d="M800,250 Q850,500 750,750" fill="none" stroke="url(#route-grad-C)" stroke-width="2" stroke-dasharray="6,6" />
+        <path id="pathD" d="M750,750 Q600,650 500,500" fill="none" stroke="url(#route-grad-D)" stroke-width="2" stroke-dasharray="6,6" />
+        <path id="pathE" d="M500,500 Q400,650 300,800" fill="none" stroke="url(#route-grad-A)" stroke-width="2" stroke-dasharray="6,6" />
+        <path id="pathF" d="M300,800 Q150,450 200,150" fill="none" stroke="url(#route-grad-C)" stroke-width="2" stroke-dasharray="6,6" />
+
+        <!-- Traveling Cargo Elements -->
+        <!-- Drone 🚁 -->
+        <g>
+          <animateMotion dur="8s" repeatCount="indefinite" path="M200,150 Q300,300 500,500" rotate="auto" />
+          <circle r="6" fill="#2874f0" filter="url(#glow-light)" />
+          <text font-size="20" y="5" x="-10">🚁</text>
+        </g>
+
+        <!-- Delivery Truck 🚚 -->
+        <g>
+          <animateMotion dur="10s" repeatCount="indefinite" path="M500,500 Q650,400 800,250" rotate="auto" />
+          <circle r="6" fill="#ffc200" filter="url(#glow-light)" />
+          <text font-size="20" y="5" x="-10">🚚</text>
+        </g>
+
+        <!-- Container Ship 🚢 -->
+        <g>
+          <animateMotion dur="12s" repeatCount="indefinite" path="M800,250 Q850,500 750,750" rotate="auto" />
+          <circle r="6" fill="#fb641b" filter="url(#glow-light)" />
+          <text font-size="20" y="5" x="-10">🚢</text>
+        </g>
+
+        <!-- Cargo Plane ✈️ -->
+        <g>
+          <animateMotion dur="7s" repeatCount="indefinite" path="M750,750 Q600,650 500,500" rotate="auto" />
+          <circle r="6" fill="#00f0ff" filter="url(#glow-light)" />
+          <text font-size="20" y="5" x="-10">✈️</text>
+        </g>
+
+        <!-- Package 📦 -->
+        <g>
+          <animateMotion dur="9s" repeatCount="indefinite" path="M500,500 Q400,650 300,800" rotate="auto" />
+          <circle r="6" fill="#2874f0" filter="url(#glow-light)" />
+          <text font-size="18" y="5" x="-9">📦</text>
+        </g>
+
+        <!-- Delivery Bike 🛵 -->
+        <g>
+          <animateMotion dur="11s" repeatCount="indefinite" path="M300,800 Q150,450 200,150" rotate="auto" />
+          <circle r="6" fill="#00f0ff" filter="url(#glow-light)" />
+          <text font-size="20" y="5" x="-10">🛵</text>
+        </g>
+
+        <!-- Glowing Hub Nodes -->
+        <!-- Node Alpha -->
+        <g transform="translate(200, 150)">
+          <circle r="5" fill="rgba(40, 116, 240, 0.4)">
+            <animate attributeName="r" values="5;22;5" dur="3s" repeatCount="indefinite" />
+            <animate attributeName="opacity" values="0.8;0;0.8" dur="3s" repeatCount="indefinite" />
+          </circle>
+          <circle r="6" fill="#2874f0" filter="url(#glow-light)" />
+          <circle r="3" fill="#ffffff" />
+          <text font-size="12" y="-12" x="-35" fill="#424242" font-family="var(--font-title)" font-weight="600">Alpha Terminal</text>
+        </g>
+
+        <!-- Node Beta -->
+        <g transform="translate(800, 250)">
+          <circle r="5" fill="rgba(251, 100, 27, 0.4)">
+            <animate attributeName="r" values="5;22;5" dur="3.5s" repeatCount="indefinite" />
+            <animate attributeName="opacity" values="0.8;0;0.8" dur="3.5s" repeatCount="indefinite" />
+          </circle>
+          <circle r="6" fill="#fb641b" filter="url(#glow-light)" />
+          <circle r="3" fill="#ffffff" />
+          <text font-size="12" y="-12" x="-32" fill="#424242" font-family="var(--font-title)" font-weight="600">Beta Port</text>
+        </g>
+
+        <!-- Hub Central -->
+        <g transform="translate(500, 500)">
+          <circle r="8" fill="rgba(255, 194, 0, 0.4)">
+            <animate attributeName="r" values="8;30;8" dur="4s" repeatCount="indefinite" />
+            <animate attributeName="opacity" values="0.8;0;0.8" dur="4s" repeatCount="indefinite" />
+          </circle>
+          <circle r="9" fill="#ffc200" filter="url(#glow-light)" />
+          <circle r="4" fill="#ffffff" />
+          <text font-size="14" y="-18" x="-45" fill="#111111" font-family="var(--font-title)" font-weight="700">Central Sorting Hub</text>
+        </g>
+
+        <!-- Node Gamma -->
+        <g transform="translate(300, 800)">
+          <circle r="5" fill="rgba(0, 240, 255, 0.4)">
+            <animate attributeName="r" values="5;22;5" dur="3.2s" repeatCount="indefinite" />
+            <animate attributeName="opacity" values="0.8;0;0.8" dur="3.2s" repeatCount="indefinite" />
+          </circle>
+          <circle r="6" fill="#00f0ff" filter="url(#glow-light)" />
+          <circle r="3" fill="#ffffff" />
+          <text font-size="12" y="-12" x="-35" fill="#424242" font-family="var(--font-title)" font-weight="600">Gamma Depot</text>
+        </g>
+
+        <!-- Node Delta -->
+        <g transform="translate(750, 750)">
+          <circle r="5" fill="rgba(40, 116, 240, 0.4)">
+            <animate attributeName="r" values="5;22;5" dur="3.8s" repeatCount="indefinite" />
+            <animate attributeName="opacity" values="0.8;0;0.8" dur="3.8s" repeatCount="indefinite" />
+          </circle>
+          <circle r="6" fill="#2874f0" filter="url(#glow-light)" />
+          <circle r="3" fill="#ffffff" />
+          <text font-size="12" y="-12" x="-35" fill="#424242" font-family="var(--font-title)" font-weight="600">Delta Station</text>
+        </g>
+      </svg>
+    </div>
+
+    <div class="error-code">404</div>
+    <div class="glass glass-card error-card">
+      <!-- Animated Shopping Cart Container -->
+      <div class="cart-animation-container">
+        <div class="floating-items">
+          <div class="float-item item-box">📦</div>
+          <div class="float-item item-phone">📱</div>
+          <div class="float-item item-shirt">👕</div>
+          <div class="float-item item-tag">🏷️</div>
+        </div>
+        <div class="animated-cart">
+          <svg class="cart-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="9" cy="21" r="1" fill="currentColor"></circle>
+            <circle cx="20" cy="21" r="1" fill="currentColor"></circle>
+            <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+          </svg>
+        </div>
+        <div class="road-line"></div>
+      </div>
+
+      <h2 class="error-title">Oops! The page you are looking for could not be found.</h2>
+      <p class="error-desc">
+        It might have been moved or deleted.
+      </p>
+      <div class="error-actions">
+        <button onclick="handle404Back(event)" class="btn btn-secondary" id="error-back-btn">Go Back</button>
+        <a href="../index.html" class="btn btn-primary">Return Home</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Reusable Web Components scripts -->
+  <script src="../js/mockData.js"></script>
+  <script src="../js/components.js"></script>
+  <script src="../js/dashboard.js"></script>
+  <script>
+    function handle404Back(event) {
+      event.preventDefault();
+      const urlParams = new URLSearchParams(window.location.search);
+      const refParam = urlParams.get('ref');
+      const fromParam = urlParams.get('from');
+      const referrer = document.referrer;
+
+      const isFromDashboard = 
+        (fromParam === 'dashboard') ||
+        (refParam && (refParam.includes('admin-dashboard') || refParam.includes('vendor-dashboard') || refParam.includes('customer-dashboard') || refParam.includes('login.html'))) ||
+        (referrer && (referrer.includes('admin-dashboard') || referrer.includes('vendor-dashboard') || referrer.includes('customer-dashboard') || referrer.includes('login.html')));
+
+      if (isFromDashboard) {
+        let targetUrl = refParam || referrer;
+        if (targetUrl && targetUrl.includes('login.html')) {
+          targetUrl = 'customer-dashboard.html';
+        }
+        window.location.href = targetUrl;
+      } else {
+        window.history.back();
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const refParam = urlParams.get('ref');
+      const fromParam = urlParams.get('from');
+      const referrer = document.referrer;
+      const backBtn = document.getElementById('error-back-btn');
+
+      const isFromDashboard = 
+        (fromParam === 'dashboard') ||
+        (refParam && (refParam.includes('admin-dashboard') || refParam.includes('vendor-dashboard') || refParam.includes('customer-dashboard') || refParam.includes('login.html'))) ||
+        (referrer && (referrer.includes('admin-dashboard') || referrer.includes('vendor-dashboard') || referrer.includes('customer-dashboard') || referrer.includes('login.html')));
+
+      if (backBtn && isFromDashboard) {
+        backBtn.textContent = 'Back to Dashboard';
+      }
+    });
+  </script>
+</body>
+</html>

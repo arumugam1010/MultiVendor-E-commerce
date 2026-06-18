@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ecosystem Services - Stackly Marketplace</title>
+  <link rel="stylesheet" href="../css/styles.css">
+  <link rel="stylesheet" href="../css/animations.css">
+  <style>
+    .services-hero {
+      background: linear-gradient(180deg, rgba(238, 242, 247, 0.75) 0%, var(--bg-base) 100%), 
+                  url('../assets/services_bg.png') no-repeat center center;
+      background-size: cover;
+      background-attachment: fixed;
+      padding: 6rem 0;
+      text-align: center;
+      position: relative;
+    }
+    
+    [data-theme="dark"] .services-hero {
+      background: linear-gradient(180deg, rgba(7, 9, 19, 0.8) 0%, var(--bg-base) 100%), 
+                  url('../assets/services_bg.png') no-repeat center center;
+      background-size: cover;
+      background-attachment: fixed;
+    }
+    .pricing-card {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+      padding: 3rem 2.5rem;
+      position: relative;
+    }
+    .pricing-card.premium {
+      border-color: var(--secondary);
+      box-shadow: 0 10px 30px var(--secondary-glow);
+    }
+    .pricing-features {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      margin: 1.5rem 0;
+    }
+    .pricing-feature {
+      display: flex;
+      gap: 0.75rem;
+      font-size: 0.95rem;
+      color: var(--text-secondary);
+      align-items: center;
+    }
+    .pricing-price {
+      font-size: 3rem;
+      font-family: var(--font-title);
+      font-weight: 800;
+      color: var(--text-primary);
+    }
+    .pricing-price span {
+      font-size: 1rem;
+      font-weight: 500;
+      color: var(--text-muted);
+    }
+  </style>
+</head>
+<body>
+  <!-- Loader -->
+  <stackly-loader></stackly-loader>
+
+  <!-- Header -->
+  <stackly-header></stackly-header>
+
+  <main>
+    <!-- Services Hero Section -->
+    <section class="services-hero">
+      <div class="container fade-in">
+        <span class="badge badge-primary" style="margin-bottom: 1rem;">STACKLY SUITE</span>
+        <h1 style="font-size: 3rem; font-family: var(--font-title); margin-bottom: 1rem;">Ecosystem Services</h1>
+        <p style="color: var(--text-secondary); max-width: 600px; margin: 0 auto; line-height: 1.6;">Integrate logistics, promoted listings, and developer APIs to scale your business operations instantly.</p>
+      </div>
+    </section>
+
+    <!-- Core Features Grid -->
+    <section class="reveal-on-scroll" style="padding-top: 0;">
+      <div class="container">
+        <div class="grid grid-4">
+          <div class="glass glass-card" style="display: flex; flex-direction: column; gap: 1rem; padding: 2rem;">
+            <div style="font-size: 2.5rem; color: var(--primary);">✈</div>
+            <h3 style="font-size: 1.25rem; font-family: var(--font-title); font-weight: 700;">Stackly Express</h3>
+            <p style="color: var(--text-secondary); font-size: 0.9rem; line-height: 1.6;">End-to-end warehousing, packaging, and next-day distribution channels powered by local logistical nodes.</p>
+          </div>
+
+          <div class="glass glass-card" style="display: flex; flex-direction: column; gap: 1rem; padding: 2rem;">
+            <div style="font-size: 2.5rem; color: var(--success);">🛡</div>
+            <h3 style="font-size: 1.25rem; font-family: var(--font-title); font-weight: 700;">SecureEscrow Pay</h3>
+            <p style="color: var(--text-secondary); font-size: 0.9rem; line-height: 1.6;">Customer payment protection holds funds securely in escrow until shipping tracking confirms execution.</p>
+          </div>
+
+          <div class="glass glass-card" style="display: flex; flex-direction: column; gap: 1rem; padding: 2rem;">
+            <div style="font-size: 2.5rem; color: var(--accent);">✦</div>
+            <h3 style="font-size: 1.25rem; font-family: var(--font-title); font-weight: 700;">Ad Campaign Promotions</h3>
+            <p style="color: var(--text-secondary); font-size: 0.9rem; line-height: 1.6;">Boost search rankings for product catalogs and gain priority impressions on home page carousels.</p>
+          </div>
+
+          <div class="glass glass-card" style="display: flex; flex-direction: column; gap: 1rem; padding: 2rem;">
+            <div style="font-size: 2.5rem; color: var(--secondary);">⚙</div>
+            <h3 style="font-size: 1.25rem; font-family: var(--font-title); font-weight: 700;">Warehouse APIs</h3>
+            <p style="color: var(--text-secondary); font-size: 0.9rem; line-height: 1.6;">Automate inventories and order notifications. Connect store transactions directly to external ERP stacks.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Pricing Grid -->
+    <section class="reveal-on-scroll" style="background: rgba(255, 255, 255, 0.01); border-top: 1px solid var(--border-color);">
+      <div class="container">
+        <div class="section-header">
+          <h2>Seller Subscriptions</h2>
+          <p>Flexible commissions and structures tailored for individual sellers and enterprise tech malls.</p>
+        </div>
+
+        <div class="grid grid-3">
+          <!-- Plan 1 -->
+          <div class="glass glass-card pricing-card">
+            <div>
+              <h3 style="font-size: 1.5rem; font-family: var(--font-title); font-weight: 700; margin-bottom: 0.5rem;">Basic Merchant</h3>
+              <p style="color: var(--text-secondary); font-size: 0.9rem;">Ideal for startup vendors launching catalogs.</p>
+            </div>
+            <div class="pricing-price">$0<span>/mo</span></div>
+            <div class="pricing-features">
+              <div class="pricing-feature">✓ 5% Commission per sale</div>
+              <div class="pricing-feature">✓ Basic store layout</div>
+              <div class="pricing-feature">✓ Standard client support</div>
+              <div class="pricing-feature" style="color: var(--text-muted); opacity: 0.6;">✗ PROMOTE listing boosts</div>
+              <div class="pricing-feature" style="color: var(--text-muted); opacity: 0.6;">✗ Developer API endpoints</div>
+            </div>
+            <button class="btn btn-secondary" onclick="alert('Starter Plan activated!')" style="width: 100%; margin-top: auto;">Register Now</button>
+          </div>
+
+          <!-- Plan 2 -->
+          <div class="glass glass-card pricing-card premium">
+            <div style="position: absolute; top: 1rem; right: 1.5rem;">
+              <span class="badge badge-secondary">RECOMMENDED</span>
+            </div>
+            <div>
+              <h3 style="font-size: 1.5rem; font-family: var(--font-title); font-weight: 700; margin-bottom: 0.5rem;">Professional Seller</h3>
+              <p style="color: var(--text-secondary); font-size: 0.9rem;">Best for scaling distribution stores.</p>
+            </div>
+            <div class="pricing-price">$29<span>/mo</span></div>
+            <div class="pricing-features">
+              <div class="pricing-feature">✓ 3% Commission per sale</div>
+              <div class="pricing-feature">✓ Custom dashboard metrics</div>
+              <div class="pricing-feature">✓ Promoted catalog slots</div>
+              <div class="pricing-feature">✓ 24/7 Seller helpline</div>
+              <div class="pricing-feature" style="color: var(--text-muted); opacity: 0.6;">✗ Dedicated API webhook</div>
+            </div>
+            <button class="btn btn-primary" onclick="alert('Professional Seller subscription activated!')" style="width: 100%; margin-top: auto;">Upgrade Store</button>
+          </div>
+
+          <!-- Plan 3 -->
+          <div class="glass glass-card pricing-card">
+            <div>
+              <h3 style="font-size: 1.5rem; font-family: var(--font-title); font-weight: 700; margin-bottom: 0.5rem;">Enterprise Suite</h3>
+              <p style="color: var(--text-secondary); font-size: 0.9rem;">Tailored for massive warehouse brands.</p>
+            </div>
+            <div class="pricing-price">$99<span>/mo</span></div>
+            <div class="pricing-features">
+              <div class="pricing-feature">✓ 1.5% Commission per sale</div>
+              <div class="pricing-feature">✓ Unlimited product listings</div>
+              <div class="pricing-feature">✓ Stackly Express warehousing</div>
+              <div class="pricing-feature">✓ High-speed developer APIs</div>
+              <div class="pricing-feature">✓ Dedicated account manager</div>
+            </div>
+            <button class="btn btn-secondary" onclick="alert('Enterprise Suite inquiry sent to team!')" style="width: 100%; margin-top: auto;">Contact Sales</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Interactive Earnings Calculator Section -->
+    <section class="reveal-on-scroll" style="padding-top: 0; padding-bottom: 4rem;">
+      <div class="container">
+        <div class="glass glass-card" style="padding: 3rem 2.5rem; background: radial-gradient(circle at top left, rgba(0, 240, 255, 0.05), transparent 60%), var(--card-gradient); border: 1px solid rgba(40, 116, 240, 0.2);">
+          <div class="section-header" style="margin-bottom: 2.5rem; text-align: left;">
+            <span class="badge badge-primary" style="margin-bottom: 0.75rem;">SELLER REVENUE MATH</span>
+            <h2>Estimate Your Profit Margins</h2>
+            <p style="margin: 0; max-width: 100%;">Enter your expected sales parameters below to compare subscription structures and calculate exact monthly payouts.</p>
+          </div>
+          
+          <div class="grid grid-2" style="gap: 3rem; align-items: start;">
+            <!-- Inputs Panel -->
+            <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+              <div class="form-group" style="margin-bottom: 0;">
+                <label class="form-label" style="font-weight: 600;">Estimated Monthly Sales Count</label>
+                <div style="display: flex; align-items: center; gap: 1rem;">
+                  <input type="range" id="calc-volume" min="10" max="5000" step="10" value="200" style="flex-grow: 1; accent-color: var(--primary);" oninput="updateCalculatorValues()">
+                  <span style="font-family: monospace; font-size: 1.1rem; font-weight: 700; width: 80px; text-align: right;" id="calc-volume-display">200</span>
+                </div>
+              </div>
+              <div class="form-group" style="margin-bottom: 0;">
+                <label class="form-label" style="font-weight: 600;">Average Item Selling Price ($)</label>
+                <div style="display: flex; align-items: center; gap: 1rem;">
+                  <input type="range" id="calc-price" min="5" max="2000" step="5" value="50" style="flex-grow: 1; accent-color: var(--primary);" oninput="updateCalculatorValues()">
+                  <span style="font-family: monospace; font-size: 1.1rem; font-weight: 700; width: 80px; text-align: right;" id="calc-price-display">$50</span>
+                </div>
+              </div>
+              <div style="background: rgba(255,255,255,0.03); border: 1px solid var(--border-color); padding: 1.5rem; border-radius: var(--radius-sm);">
+                <h4 style="font-size: 1.1rem; font-family: var(--font-title); margin-bottom: 0.5rem; color: var(--text-primary);">Total Monthly Revenue:</h4>
+                <div style="font-size: 2.2rem; font-family: var(--font-title); font-weight: 800; color: var(--secondary);" id="calc-revenue-display">$10,000.00</div>
+              </div>
+            </div>
+
+            <!-- Output Results Cards -->
+            <div style="display: flex; flex-direction: column; gap: 1rem;">
+              <!-- Basic plan math -->
+              <div class="glass" style="padding: 1.25rem; display: flex; justify-content: space-between; align-items: center; border: 1px solid var(--border-color); border-radius: var(--radius-sm);">
+                <div>
+                  <h4 style="font-size: 1.05rem; font-family: var(--font-title); color: var(--text-primary);">Basic Merchant <span style="font-size: 0.75rem; color: var(--text-muted); font-family: var(--font-body);">(5% fee)</span></h4>
+                  <p style="font-size: 0.85rem; color: var(--text-muted);">Est. platform commission: <span id="calc-basic-fee">$500.00</span></p>
+                </div>
+                <div style="text-align: right;">
+                  <div style="font-size: 1.3rem; font-weight: 700; color: var(--text-primary);" id="calc-basic-payout">$9,500.00</div>
+                  <span style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em;">Net Payout</span>
+                </div>
+              </div>
+
+              <!-- Professional plan math -->
+              <div class="glass" style="padding: 1.25rem; display: flex; justify-content: space-between; align-items: center; border: 1px solid var(--primary); border-radius: var(--radius-sm);">
+                <div>
+                  <h4 style="font-size: 1.05rem; font-family: var(--font-title); color: var(--primary);">Professional Seller <span style="font-size: 0.75rem; color: var(--primary-hover); font-family: var(--font-body);">(3% + $29)</span></h4>
+                  <p style="font-size: 0.85rem; color: var(--text-muted);">Est. platform commission: <span id="calc-pro-fee">$329.00</span></p>
+                </div>
+                <div style="text-align: right;">
+                  <div style="font-size: 1.3rem; font-weight: 700; color: var(--success);" id="calc-pro-payout">$9,671.00</div>
+                  <span style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em;">Net Payout</span>
+                </div>
+              </div>
+
+              <!-- Enterprise plan math -->
+              <div class="glass" style="padding: 1.25rem; display: flex; justify-content: space-between; align-items: center; border: 1px solid var(--border-color); border-radius: var(--radius-sm);">
+                <div>
+                  <h4 style="font-size: 1.05rem; font-family: var(--font-title); color: var(--text-primary);">Enterprise Suite <span style="font-size: 0.75rem; color: var(--text-muted); font-family: var(--font-body);">(1.5% + $99)</span></h4>
+                  <p style="font-size: 0.85rem; color: var(--text-muted);">Est. platform commission: <span id="calc-enterprise-fee">$249.00</span></p>
+                </div>
+                <div style="text-align: right;">
+                  <div style="font-size: 1.3rem; font-weight: 700; color: var(--text-primary);" id="calc-enterprise-payout">$9,751.00</div>
+                  <span style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em;">Net Payout</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLA Service Guarantees Section -->
+    <section class="reveal-on-scroll" style="padding-top: 0; padding-bottom: 4rem;">
+      <div class="container">
+        <div class="grid grid-3" style="text-align: center;">
+          <div class="glass glass-card" style="padding: 2.5rem 2rem;">
+            <div style="font-size: 3rem; color: var(--primary); margin-bottom: 1rem;">🛡</div>
+            <h3 style="font-size: 1.25rem; font-family: var(--font-title); margin-bottom: 0.75rem; color: var(--text-primary);">Zero-Trust Security</h3>
+            <p style="color: var(--text-secondary); font-size: 0.9rem; line-height: 1.6;">All transactions and identity signatures are cryptographically hashed and verified against local node instances.</p>
+          </div>
+
+          <div class="glass glass-card" style="padding: 2.5rem 2rem;">
+            <div style="font-size: 3rem; color: var(--success); margin-bottom: 1rem;">📈</div>
+            <h3 style="font-size: 1.25rem; font-family: var(--font-title); margin-bottom: 0.75rem; color: var(--text-primary);">99.98% Service Uptime</h3>
+            <p style="color: var(--text-secondary); font-size: 0.9rem; line-height: 1.6;">Our distributed node hosting keeps catalog indexes and vendor dashboard data accessible 24/7 without delays.</p>
+          </div>
+
+          <div class="glass glass-card" style="padding: 2.5rem 2rem;">
+            <div style="font-size: 3rem; color: var(--accent); margin-bottom: 1rem;">☎</div>
+            <h3 style="font-size: 1.25rem; font-family: var(--font-title); margin-bottom: 0.75rem; color: var(--text-primary);">Dedicated Seller Desk</h3>
+            <p style="color: var(--text-secondary); font-size: 0.9rem; line-height: 1.6;">Professional and Enterprise partners get 24-hour phone hotline support from dedicated merchant specialists.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Seller FAQ Accordion Section -->
+    <section class="reveal-on-scroll" style="padding-top: 0; padding-bottom: 4rem;">
+      <div class="container" style="max-width: 900px;">
+        <div class="section-header">
+          <span class="badge badge-secondary" style="margin-bottom: 1rem;">COMMON QUESTIONS</span>
+          <h2>Merchant & Logistics FAQ</h2>
+          <p>Answers to common questions about payouts, escrow holding times, and platform parameters.</p>
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 1rem;">
+          <!-- Question 1 -->
+          <div class="glass" style="padding: 1.5rem; border-radius: var(--radius-md); cursor: pointer;" onclick="toggleAccordion(this)">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <h4 style="font-size: 1.15rem; font-family: var(--font-title); color: var(--text-primary); margin: 0;">How long are transaction funds held in SecureEscrow Pay?</h4>
+              <span class="acc-icon" style="font-size: 1.25rem; transition: transform 0.3s ease; color: var(--text-primary);">+</span>
+            </div>
+            <div class="acc-body" style="max-height: 0; overflow: hidden; transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); margin-top: 0;">
+              <p style="color: var(--text-secondary); font-size: 0.95rem; line-height: 1.6; padding-top: 1rem; border-top: 1px solid var(--border-color); margin-top: 0.75rem;">
+                Payments processed through our escrow module are held securely in localized node pools. Funds are released instantly to your seller balance as soon as the logistics carrier tracking confirms product delivery or when the customer registers positive execution signals.
+              </p>
+            </div>
+          </div>
+
+          <!-- Question 2 -->
+          <div class="glass" style="padding: 1.5rem; border-radius: var(--radius-md); cursor: pointer;" onclick="toggleAccordion(this)">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <h4 style="font-size: 1.15rem; font-family: var(--font-title); color: var(--text-primary); margin: 0;">Are there any limits on developer API integrations?</h4>
+              <span class="acc-icon" style="font-size: 1.25rem; transition: transform 0.3s ease; color: var(--text-primary);">+</span>
+            </div>
+            <div class="acc-body" style="max-height: 0; overflow: hidden; transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); margin-top: 0;">
+              <p style="color: var(--text-secondary); font-size: 0.95rem; line-height: 1.6; padding-top: 1rem; border-top: 1px solid var(--border-color); margin-top: 0.75rem;">
+                Basic Merchant tier has access to basic checkout redirects. The Enterprise Suite tier enjoys unlimited, rate-free API tokens to synchronize order, inventory, and analytics tables directly with high-performance ERP systems (such as SAP or custom nodes).
+              </p>
+            </div>
+          </div>
+
+          <!-- Question 3 -->
+          <div class="glass" style="padding: 1.5rem; border-radius: var(--radius-md); cursor: pointer;" onclick="toggleAccordion(this)">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <h4 style="font-size: 1.15rem; font-family: var(--font-title); color: var(--text-primary); margin: 0;">What coverage models does Stackly Express operate under?</h4>
+              <span class="acc-icon" style="font-size: 1.25rem; transition: transform 0.3s ease; color: var(--text-primary);">+</span>
+            </div>
+            <div class="acc-body" style="max-height: 0; overflow: hidden; transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); margin-top: 0;">
+              <p style="color: var(--text-secondary); font-size: 0.95rem; line-height: 1.6; padding-top: 1rem; border-top: 1px solid var(--border-color); margin-top: 0.75rem;">
+                We currently partner with regional hyper-local distribution channels and courier services to support express same-day packaging and drop-off. Warehouse allocations are managed via high-density fulfillment nodes situated in prime commercial areas.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Trusted Partners Showcase Section -->
+    <section class="reveal-on-scroll" style="padding-top: 0; padding-bottom: 4rem; overflow: hidden;">
+      <div class="container">
+        <div class="section-header" style="margin-bottom: 2.5rem;">
+          <h2 style="font-size: 1.8rem; font-family: var(--font-title);">Our Strategic Partners</h2>
+          <p>Collaborating with global tech manufacturers and banking channels to deliver supreme buyer-seller mechanics.</p>
+        </div>
+        
+        <style>
+          @keyframes marquee {
+            0% { transform: translateX(0%); }
+            100% { transform: translateX(-50%); }
+          }
+          .marquee-container {
+            display: flex;
+            width: 200%;
+            overflow: hidden;
+            position: relative;
+          }
+          .marquee-content {
+            display: flex;
+            justify-content: space-around;
+            width: 50%;
+            animation: marquee 25s linear infinite;
+            gap: 2rem;
+          }
+          .partner-logo-card {
+            padding: 1.5rem 3rem;
+            min-width: 180px;
+            text-align: center;
+            font-size: 1.3rem;
+            font-family: var(--font-title);
+            font-weight: 800;
+            letter-spacing: 0.05em;
+            color: var(--text-secondary);
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--border-color);
+            background: var(--bg-surface-alt);
+          }
+        </style>
+
+        <div class="marquee-container">
+          <div class="marquee-content">
+            <div class="partner-logo-card">ASUS TECH</div>
+            <div class="partner-logo-card" style="color: var(--accent);">POCO PHONES</div>
+            <div class="partner-logo-card" style="color: var(--secondary);">NOISE SOUND</div>
+            <div class="partner-logo-card" style="color: var(--primary);">AXIS FIN</div>
+            <div class="partner-logo-card">QUANTUM</div>
+          </div>
+          <div class="marquee-content">
+            <div class="partner-logo-card">ASUS TECH</div>
+            <div class="partner-logo-card" style="color: var(--accent);">POCO PHONES</div>
+            <div class="partner-logo-card" style="color: var(--secondary);">NOISE SOUND</div>
+            <div class="partner-logo-card" style="color: var(--primary);">AXIS FIN</div>
+            <div class="partner-logo-card">QUANTUM</div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <stackly-footer></stackly-footer>
+
+  <script src="../js/mockData.js"></script>
+  <script src="../js/components.js"></script>
+  <script src="../js/dashboard.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      updateCalculatorValues();
+    });
+
+    function updateCalculatorValues() {
+      const volEl = document.getElementById('calc-volume');
+      const prEl = document.getElementById('calc-price');
+      if (!volEl || !prEl) return;
+
+      const volume = Number(volEl.value);
+      const price = Number(prEl.value);
+      
+      document.getElementById('calc-volume-display').innerText = volume;
+      document.getElementById('calc-price-display').innerText = '$' + price;
+      
+      const gross = volume * price;
+      document.getElementById('calc-revenue-display').innerText = '$' + gross.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+      
+      // Basic: 5% fee, $0 subscription
+      const basicFee = gross * 0.05;
+      const basicPayout = gross - basicFee;
+      document.getElementById('calc-basic-fee').innerText = '$' + basicFee.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+      document.getElementById('calc-basic-payout').innerText = '$' + basicPayout.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+      
+      // Pro: 3% fee, $29 subscription
+      const proCommission = gross * 0.03;
+      const proTotalCost = proCommission + 29;
+      const proPayout = gross - proTotalCost;
+      document.getElementById('calc-pro-fee').innerText = '$' + proTotalCost.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+      document.getElementById('calc-pro-payout').innerText = '$' + proPayout.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+      
+      // Enterprise: 1.5% fee, $99 subscription
+      const enterpriseCommission = gross * 0.015;
+      const enterpriseTotalCost = enterpriseCommission + 99;
+      const enterprisePayout = gross - enterpriseTotalCost;
+      document.getElementById('calc-enterprise-fee').innerText = '$' + enterpriseTotalCost.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+      document.getElementById('calc-enterprise-payout').innerText = '$' + enterprisePayout.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    }
+
+    function toggleAccordion(element) {
+      const body = element.querySelector('.acc-body');
+      const icon = element.querySelector('.acc-icon');
+      if (!body || !icon) return;
+
+      const isOpen = body.style.maxHeight && body.style.maxHeight !== '0px';
+      
+      // Close all other accordions first
+      const allAccs = document.querySelectorAll('.acc-body');
+      const allIcons = document.querySelectorAll('.acc-icon');
+      allAccs.forEach(acc => acc.style.maxHeight = '0px');
+      allIcons.forEach(ic => ic.innerText = '+');
+      
+      if (!isOpen) {
+        body.style.maxHeight = body.scrollHeight + 'px';
+        icon.innerText = '-';
+      } else {
+        body.style.maxHeight = '0px';
+        icon.innerText = '+';
+      }
+    }
+  </script>
+</body>
+</html>

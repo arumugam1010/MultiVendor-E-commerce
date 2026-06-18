@@ -1,0 +1,1170 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard - Stackly Marketplace</title>
+  <link rel="stylesheet" href="../css/styles.css">
+  <link rel="stylesheet" href="../css/animations.css">
+  <link rel="stylesheet" href="../css/dashboard.css">
+  <style>
+    /* Consolidated tab styling */
+    .dashboard-tab-content {
+      display: none;
+    }
+    
+    /* Layout styling for User Management tab */
+    .split-layout {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 2rem;
+      align-items: start;
+    }
+    @media (max-width: 1024px) {
+      .split-layout {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Layout styling for Vendors tab */
+    .vendor-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 2.5rem;
+    }
+    .vendor-card {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      padding: 2.5rem;
+      text-align: center;
+      align-items: center;
+      gap: 1.25rem;
+    }
+    .vendor-logo-wrapper {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background: var(--primary-gradient);
+      box-shadow: 0 4px 15px var(--primary-glow);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      font-family: var(--font-title);
+      font-weight: 800;
+      color: #ffffff;
+    }
+    .vendor-info-row {
+      display: flex;
+      gap: 1.5rem;
+      border-top: 1px solid var(--border-color);
+      border-bottom: 1px solid var(--border-color);
+      width: 100%;
+      padding: 1rem 0;
+      justify-content: center;
+    }
+    .vendor-stat {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+    .vendor-stat-val {
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+    .vendor-stat-lbl {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+    }
+    .rating-stars {
+      color: #fbbf24;
+      display: flex;
+      align-items: center;
+      gap: 0.15rem;
+    }
+    .vendors-filter-bar {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      gap: 2rem;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+    }
+
+    /* Settings tab styling */
+    .settings-grid {
+      display: grid;
+      grid-template-columns: 1fr 2fr;
+      gap: 2rem;
+      align-items: start;
+    }
+    @media (max-width: 768px) {
+      .settings-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+    .settings-nav {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+    .settings-nav-item {
+      padding: 1rem 1.5rem;
+      border-radius: var(--radius-sm);
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid var(--border-color);
+      cursor: pointer;
+      font-weight: 500;
+      color: var(--text-secondary);
+      transition: all var(--transition-fast);
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    .settings-nav-item:hover, .settings-nav-item.active {
+      color: var(--text-primary);
+      border-color: var(--primary);
+    }
+    .settings-nav-item.active {
+      background: rgba(40, 116, 240, 0.05);
+      border-color: var(--primary);
+      color: var(--primary);
+    }
+    .settings-pane {
+      display: none;
+    }
+    .settings-pane.active {
+      display: block;
+    }
+    .toggle-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.25rem 0;
+      border-bottom: 1px solid var(--border-color);
+    }
+    .toggle-row:last-child {
+      border-bottom: none;
+    }
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 50px;
+      height: 26px;
+    }
+    .switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: var(--border-color);
+      transition: .4s;
+      border-radius: 34px;
+    }
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 18px;
+      width: 18px;
+      left: 4px;
+      bottom: 4px;
+      background-color: white;
+      transition: .4s;
+      border-radius: 50%;
+    }
+    input:checked + .slider {
+      background-color: var(--primary);
+    }
+    input:checked + .slider:before {
+      transform: translateX(24px);
+    }
+  </style>
+</head>
+<body>
+  <!-- Loader -->
+  <stackly-loader></stackly-loader>
+
+  <!-- Route Access Guard check -->
+  <script src="../js/mockData.js"></script>
+  <script src="../js/auth.js"></script>
+  <script>
+    if (!StacklyAuth.guardRoute('admin')) {
+      document.body.style.display = 'none';
+    }
+  </script>
+
+  <div class="dashboard-wrapper">
+    <!-- Sidebar -->
+    <stackly-sidebar role="admin" active="dashboard"></stackly-sidebar>
+
+    <!-- Content Deck -->
+    <div class="dashboard-main">
+      <!-- Topbar Navigation -->
+      <stackly-dashboard-header></stackly-dashboard-header>
+
+      <!-- Main Dashboard Contents -->
+      <div class="dashboard-content fade-in">
+        
+        <!-- ==================== TAB: DASHBOARD (OVERVIEW) ==================== -->
+        <div class="dashboard-tab-content" id="tab-content-dashboard">
+          <div class="dashboard-header">
+            <div>
+              <h1>Admin Deck</h1>
+              <p>Welcome back, <span id="admin-user-name" style="font-weight: 700; color: var(--primary);">Operator</span>. Overall system performance looks stable.</p>
+            </div>
+            <div>
+              <span class="badge badge-success">System Nominal</span>
+            </div>
+          </div>
+
+          <!-- 4 Stats Cards -->
+          <div class="stats-grid">
+            <div class="glass glass-card stat-card" style="cursor: pointer;" onclick="switchToTab('orders')">
+              <div class="stat-info">
+                <span class="stat-title">Platform Sales</span>
+                <span class="stat-value">$2,840k</span>
+                <span class="stat-change up">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" style="width: 16px; height: 16px;"><path fill-rule="evenodd" d="M5.293 9.707a1 1 0 010-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 01-1.414 1.414L11 7.414V15a1 1 0 11-2 0V7.414L6.707 9.707a1 1 0 01-1.414 0z" clip-rule="evenodd"/></svg>
+                  +12.4% vs last week
+                </span>
+              </div>
+              <div class="stat-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" style="width: 26px; height: 26px;"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+              </div>
+            </div>
+
+            <div class="glass glass-card stat-card" style="cursor: pointer;" onclick="switchToTab('users')">
+              <div class="stat-info">
+                <span class="stat-title">Verified Users</span>
+                <span class="stat-value" id="stat-total-users">0</span>
+                <span class="stat-change up">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" style="width: 16px; height: 16px;"><path fill-rule="evenodd" d="M5.293 9.707a1 1 0 010-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 01-1.414 1.414L11 7.414V15a1 1 0 11-2 0V7.414L6.707 9.707a1 1 0 01-1.414 0z" clip-rule="evenodd"/></svg>
+                  +15.2%
+                </span>
+              </div>
+              <div class="stat-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" style="width: 26px; height: 26px;"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+              </div>
+            </div>
+
+            <div class="glass glass-card stat-card" style="cursor: pointer;" onclick="switchToTab('vendors')">
+              <div class="stat-info">
+                <span class="stat-title">Store Vendors</span>
+                <span class="stat-value" id="stat-total-vendors">0</span>
+                <span class="stat-change up">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" style="width: 16px; height: 16px;"><path fill-rule="evenodd" d="M5.293 9.707a1 1 0 010-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 01-1.414 1.414L11 7.414V15a1 1 0 11-2 0V7.414L6.707 9.707a1 1 0 01-1.414 0z" clip-rule="evenodd"/></svg>
+                  +4.9%
+                </span>
+              </div>
+              <div class="stat-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" style="width: 26px; height: 26px;"><path stroke-linecap="round" stroke-linejoin="round" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+              </div>
+            </div>
+
+            <div class="glass glass-card stat-card">
+              <div class="stat-info">
+                <span class="stat-title">Review Flags</span>
+                <span class="stat-value">3</span>
+                <span class="stat-change down">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" style="width: 16px; height: 16px;"><path fill-rule="evenodd" d="M14.707 10.293a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 111.414-1.414L9 12.586V5a1 1 0 012 0v7.586l2.293-2.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                  -25%
+                </span>
+              </div>
+              <div class="stat-icon" style="color: var(--danger);">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" style="width: 26px; height: 26px;"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+              </div>
+            </div>
+          </div>
+
+          <!-- SVG Line/Bar Charts Grid -->
+          <div class="charts-grid">
+            <div class="glass glass-card chart-card">
+              <div class="chart-header">
+                <span class="chart-title">Gross Earnings ($k)</span>
+                <span class="badge badge-secondary">Real-Time Data</span>
+              </div>
+              <div class="chart-container" id="adminLineChart">
+                <!-- Rendered by dashboard.js -->
+              </div>
+            </div>
+
+            <div class="glass glass-card chart-card">
+              <div class="chart-header">
+                <span class="chart-title">Monthly Signups</span>
+                <span class="badge badge-primary">Scale Index</span>
+              </div>
+              <div class="chart-container" id="adminBarChart">
+                <!-- Rendered by dashboard.js -->
+              </div>
+            </div>
+          </div>
+
+          <!-- Orders Table -->
+          <div class="glass glass-card table-card">
+            <div class="table-header">
+              <h3 style="font-size: 1.25rem; font-family: var(--font-title); font-weight: 600;">System Transaction Logs</h3>
+              <button onclick="switchToTab('orders')" class="btn btn-secondary" style="padding: 0.5rem 1rem; font-size: 0.85rem;">View Detailed Logs</button>
+            </div>
+            <div class="table-wrapper">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Order Node ID</th>
+                    <th>Customer Client</th>
+                    <th>Timestamp</th>
+                    <th>Total Cost</th>
+                    <th>Verification Status</th>
+                    <th>Allocated Items</th>
+                  </tr>
+                </thead>
+                <tbody id="admin-orders-table-body">
+                  <!-- Seeded dynamically -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- ==================== TAB: USERS ==================== -->
+        <div class="dashboard-tab-content" id="tab-content-users">
+          <div class="dashboard-header">
+            <div>
+              <h1>User Accounts Register</h1>
+              <p>Administer, modify roles, and oversee authentication credentials.</p>
+            </div>
+          </div>
+
+          <!-- User Search Box -->
+          <div class="glass glass-card" style="padding: 1.5rem; display: flex; justify-content: flex-start; margin-bottom: 2rem;">
+            <div class="search-box" style="width: 350px; max-width: 100%;">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+              <input type="text" id="user-search-input" placeholder="Search users by name or email..." oninput="renderUserTable()">
+            </div>
+          </div>
+
+          <!-- System User Counters -->
+          <div class="stats-grid" style="margin-bottom: 2rem;">
+            <div class="glass glass-card stat-card" style="padding: 1.5rem;">
+              <div class="stat-info">
+                <span class="stat-title">Total Accounts</span>
+                <span class="stat-value" id="count-total">0</span>
+              </div>
+            </div>
+            <div class="glass glass-card stat-card" style="padding: 1.5rem;">
+              <div class="stat-info">
+                <span class="stat-title">Customers</span>
+                <span class="stat-value" id="count-customers" style="color: var(--primary);">0</span>
+              </div>
+            </div>
+            <div class="glass glass-card stat-card" style="padding: 1.5rem;">
+              <div class="stat-info">
+                <span class="stat-title">Store Vendors</span>
+                <span class="stat-value" id="count-vendors" style="color: var(--secondary);">0</span>
+              </div>
+            </div>
+            <div class="glass glass-card stat-card" style="padding: 1.5rem;">
+              <div class="stat-info">
+                <span class="stat-title">Platform Admins</span>
+                <span class="stat-value" id="count-admins" style="color: var(--accent);">0</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="split-layout">
+            <!-- User Directory Card -->
+            <div class="glass glass-card table-card" style="width: 100%;">
+              <div class="table-header">
+                <h3 style="font-size: 1.25rem; font-family: var(--font-title); font-weight: 600;">Registered Identities</h3>
+              </div>
+              <div class="table-wrapper">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Avatar</th>
+                      <th>User Details</th>
+                      <th>Email Address</th>
+                      <th>Assigned Role</th>
+                      <th style="text-align: right;">Operations</th>
+                    </tr>
+                  </thead>
+                  <tbody id="user-accounts-table-body">
+                    <!-- Rendered dynamically -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <!-- Register User Form -->
+            <div class="glass glass-card">
+              <h3 style="font-size: 1.25rem; font-family: var(--font-title); font-weight: 600; margin-bottom: 1.5rem;">Create Account</h3>
+              <form id="admin-create-user-form" onsubmit="event.preventDefault(); createUserHandler();">
+                <div class="form-group">
+                  <label class="form-label" for="username">Username</label>
+                  <input class="form-input" type="text" id="reg-username" required placeholder="Nova Seller 2">
+                </div>
+                <div class="form-group">
+                  <label class="form-label" for="email">Email address</label>
+                  <input class="form-input" type="email" id="reg-email" required placeholder="seller2@novatech.com">
+                </div>
+                <div class="form-group">
+                  <label class="form-label" for="password">Password</label>
+                  <input class="form-input" type="password" id="reg-password" required placeholder="••••••••">
+                </div>
+                <div class="form-group">
+                  <label class="form-label" for="role">Role Permission</label>
+                  <select class="form-input sort-select" id="reg-role" style="width:100%; border-radius:8px; height: 50px;">
+                    <option value="customer">Customer</option>
+                    <option value="vendor">Vendor</option>
+                    <option value="admin">Admin</option>
+                  </select>
+                </div>
+                <button class="btn btn-primary" type="submit" style="width: 100%; margin-top: 1rem;">Deploy Account</button>
+              </form>
+            </div>
+          </div>
+        </div>
+
+        <!-- ==================== TAB: VENDORS ==================== -->
+        <div class="dashboard-tab-content" id="tab-content-vendors">
+          <div class="dashboard-header">
+            <div>
+              <h1>Verified Store Merchants</h1>
+              <p>Direct deal options with authorized distributors and tech firms offering certified secure escrows.</p>
+            </div>
+          </div>
+
+          <!-- Vendor Filter Panel -->
+          <div class="glass glass-card" style="padding: 1.5rem; display: flex; justify-content: space-between; align-items: center; gap: 1.5rem; flex-wrap: wrap; margin-bottom: 2rem;">
+            <div class="search-box" style="width: 300px; max-width: 100%;">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+              <input type="text" id="vendor-search" placeholder="Filter merchants by name..." oninput="filterVendors()">
+            </div>
+            <div>
+              <select class="form-input sort-select" id="vendor-rating-filter" onchange="filterVendors()" style="width:100%; border-radius:8px;">
+                <option value="all">All Ratings</option>
+                <option value="4.8">4.8+ Stars</option>
+                <option value="4.7">4.7+ Stars</option>
+                <option value="4.6">4.6+ Stars</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Vendor Grid -->
+          <div class="vendor-grid" id="vendors-cards-container">
+            <!-- Rendered dynamically -->
+          </div>
+        </div>
+
+        <!-- ==================== TAB: PRODUCTS ==================== -->
+        <div class="dashboard-tab-content" id="tab-content-products">
+          <div class="dashboard-header">
+            <div>
+              <h1>Global Catalog Registry</h1>
+              <p>Inspect, supervise, and decommission listed products from the marketplace index.</p>
+            </div>
+          </div>
+
+          <!-- Products Table Card -->
+          <div class="glass glass-card table-card">
+            <div class="table-wrapper">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Product Node Details</th>
+                    <th>Category</th>
+                    <th>Pricing</th>
+                    <th>Merchant Seller</th>
+                    <th>Rating</th>
+                    <th>Operations</th>
+                  </tr>
+                </thead>
+                <tbody id="global-products-table-body">
+                  <!-- JS -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- ==================== TAB: ORDERS ==================== -->
+        <div class="dashboard-tab-content" id="tab-content-orders">
+          <div class="dashboard-header">
+            <div>
+              <h1>Platform Orders Ledger</h1>
+              <p>Supervisory deck containing overall platform sales transcripts. Modify authorization state codes.</p>
+            </div>
+          </div>
+
+          <div class="glass glass-card table-card">
+            <div class="table-wrapper">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Order Node ID</th>
+                    <th>Client Customer</th>
+                    <th>Timestamp</th>
+                    <th>Invoice Total</th>
+                    <th>Delivery Status</th>
+                    <th>Allocated Units</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="orders-ledger-table-body">
+                  <!-- JS -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- ==================== TAB: REPORTS & ANALYTICS ==================== -->
+        <div class="dashboard-tab-content" id="tab-content-reports">
+          <div class="dashboard-header">
+            <div>
+              <h1>Financial Reports & Logs</h1>
+              <p>Compile and download platform audit records, tax settlements, and transactional nodes logs.</p>
+            </div>
+          </div>
+
+          <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem;">
+            <div class="glass glass-card" style="padding: 2.5rem; text-align: center;">
+              <h3 style="font-family: var(--font-title); font-size:1.25rem; font-weight:700; margin-bottom:1rem;">Generate Platform CSV Audit</h3>
+              <p style="color:var(--text-secondary); font-size:0.9rem; margin-bottom:1.5rem; line-height:1.5;">Exports full transactions, registrations, and commissions details compiled in a structured sheet format.</p>
+              <button class="btn btn-primary" onclick="alert('CSV report generated and saved to system download directory!')" style="width: 100%;">Download CSV Report</button>
+            </div>
+            
+            <div class="glass glass-card" style="padding: 2.5rem; text-align: center;">
+              <h3 style="font-family: var(--font-title); font-size:1.25rem; font-weight:700; margin-bottom:1rem;">Tax Clearing Settlement</h3>
+              <p style="color:var(--text-secondary); font-size:0.9rem; margin-bottom:1.5rem; line-height:1.5;">Review computed tax allocations and generate certified clearance credentials for corporate nodes.</p>
+              <button class="btn btn-secondary" onclick="alert('Tax calculations finalized!')" style="width: 100%;">Finalize Tax Report</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="dashboard-tab-content" id="tab-content-analytics">
+          <div class="dashboard-header">
+            <div>
+              <h1>Platform Analytics Registry</h1>
+              <p>Review real-time conversion rates, telemetry signals, and traffic channels index.</p>
+            </div>
+          </div>
+
+          <div class="glass glass-card" style="padding: 2rem;">
+            <h3 style="font-size: 1.25rem; font-family: var(--font-title); font-weight: 600; margin-bottom: 1.5rem;">Daily Traffic Telemetry</h3>
+            <div style="display:flex; justify-content:space-between; border-bottom: 1px solid var(--border-color); padding: 1rem 0;">
+              <span>Total Unique Client Nodes Visits</span>
+              <strong style="color: var(--secondary);">148,902 visits</strong>
+            </div>
+            <div style="display:flex; justify-content:space-between; border-bottom: 1px solid var(--border-color); padding: 1rem 0;">
+              <span>Average Session Duration</span>
+              <strong>12 mins 45 secs</strong>
+            </div>
+            <div style="display:flex; justify-content:space-between; padding: 1rem 0;">
+              <span>Cart Checkout Conversion Rate</span>
+              <strong style="color: var(--success);">4.82% conversion</strong>
+            </div>
+          </div>
+        </div>
+
+        <!-- ==================== TAB: SETTINGS ==================== -->
+        <div class="dashboard-tab-content" id="tab-content-settings">
+          <div class="dashboard-header">
+            <div>
+              <h1>Preference Configuration</h1>
+              <p>Customize security channels, theme preferences, and identity parameters.</p>
+            </div>
+          </div>
+
+          <div class="settings-grid">
+            <!-- Left Nav -->
+            <div class="settings-nav">
+              <div class="settings-nav-item active" onclick="switchSettingsTab('profile')" id="nav-profile">
+                Profile Details
+              </div>
+              <div class="settings-nav-item" onclick="switchSettingsTab('security')" id="nav-security">
+                Security & Credentials
+              </div>
+              <div class="settings-nav-item" onclick="switchSettingsTab('preferences')" id="nav-preferences">
+                System Preferences
+              </div>
+            </div>
+
+            <!-- Right Panes -->
+            <div>
+              <!-- Tab 1: Profile Pane -->
+              <div class="glass glass-card settings-pane active" id="pane-profile">
+                <h3 style="font-size: 1.25rem; font-family: var(--font-title); font-weight: 600; margin-bottom: 1.5rem;">My Profile Parameters</h3>
+                <form id="settings-profile-form" onsubmit="event.preventDefault(); saveProfileHandler();">
+                  <div class="form-group">
+                    <label class="form-label" for="username">Username / Operator Name</label>
+                    <input class="form-input" type="text" id="set-username" required>
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label" for="email">Primary Email address</label>
+                    <input class="form-input" type="email" id="set-email" required>
+                  </div>
+                  <button class="btn btn-primary" type="submit" style="margin-top: 1rem;">Save Profile Updates</button>
+                </form>
+              </div>
+
+              <!-- Tab 2: Security Pane -->
+              <div class="glass glass-card settings-pane" id="pane-security">
+                <h3 style="font-size: 1.25rem; font-family: var(--font-title); font-weight: 600; margin-bottom: 1.5rem;">Update Security Credentials</h3>
+                <form id="settings-security-form" onsubmit="event.preventDefault(); savePasswordHandler();">
+                  <div class="form-group">
+                    <label class="form-label" for="curr-password">Current Password</label>
+                    <input class="form-input" type="password" id="set-curr-pass" required placeholder="••••••••">
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label" for="new-password">New Secure Password</label>
+                    <input class="form-input" type="password" id="set-new-pass" required placeholder="••••••••">
+                  </div>
+                  <button class="btn btn-primary" type="submit" style="margin-top: 1rem;">Update Password</button>
+                </form>
+              </div>
+
+              <!-- Tab 3: System Preferences Pane -->
+              <div class="glass glass-card settings-pane" id="pane-preferences">
+                <h3 style="font-size: 1.25rem; font-family: var(--font-title); font-weight: 600; margin-bottom: 1.5rem;">System Interface Preferences</h3>
+                
+                <div class="toggle-row">
+                  <div>
+                    <h4 style="font-weight: 600; margin-bottom: 0.25rem;">Visual Theme</h4>
+                    <p style="font-size: 0.85rem; color: var(--text-secondary);">Toggle between Flipkart-style Light and Navy Dark themes</p>
+                  </div>
+                  <button class="btn btn-secondary" onclick="toggleSystemTheme()" style="padding: 0.5rem 1rem; font-size: 0.85rem;" id="pref-theme-btn">
+                    Switch Theme
+                  </button>
+                </div>
+
+                <div class="toggle-row">
+                  <div>
+                    <h4 style="font-weight: 600; margin-bottom: 0.25rem;">Dynamic Sounds</h4>
+                    <p style="font-size: 0.85rem; color: var(--text-secondary);">Play micro-sounds on checkout buttons and tabs click</p>
+                  </div>
+                  <label class="switch">
+                    <input type="checkbox" id="pref-sounds" checked onchange="savePreferences()">
+                    <span class="slider"></span>
+                  </label>
+                </div>
+
+                <div class="toggle-row">
+                  <div>
+                    <h4 style="font-weight: 600; margin-bottom: 0.25rem;">Transactional Email Notifications</h4>
+                    <p style="font-size: 0.85rem; color: var(--text-secondary);">Receive invoices and logs via primary mail node</p>
+                  </div>
+                  <label class="switch">
+                    <input type="checkbox" id="pref-email" checked onchange="savePreferences()">
+                    <span class="slider"></span>
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <script src="../js/components.js"></script>
+  <script src="../js/dashboard.js"></script>
+  <script>
+    const currentUser = StacklyAuth.getCurrentUser();
+
+    document.addEventListener('DOMContentLoaded', () => {
+      if (currentUser) {
+        document.getElementById('admin-user-name').innerText = currentUser.username;
+        document.getElementById('set-username').value = currentUser.username;
+        document.getElementById('set-email').value = currentUser.email;
+        loadPreferences();
+      }
+
+      // Draw SVG Charts
+      drawCharts();
+
+      // Repopulate notifications dropdown
+      populateNotifications();
+
+      // Repopulate overview orders table
+      populateOrdersTable();
+
+      // Handle custom events from sidebar click tab changes
+      window.addEventListener('dashboardTabChanged', (e) => {
+        const activeTab = e.detail.tab;
+        if (activeTab === 'dashboard') {
+          drawCharts();
+          populateOrdersTable();
+        } else if (activeTab === 'users') {
+          renderUserTable();
+        } else if (activeTab === 'vendors') {
+          filterVendors();
+        } else if (activeTab === 'products') {
+          renderProductsTable();
+        } else if (activeTab === 'orders') {
+          populateOrdersLedger();
+        }
+      });
+
+      // Initialize main components framework
+      StacklyDashboard.initTabs('admin');
+
+      // Redraw charts if theme toggles
+      window.addEventListener('themeChanged', drawCharts);
+
+      // Redraw charts on window resize/orientation change (debounced)
+      let resizeTimeout;
+      window.addEventListener('resize', () => {
+        clearTimeout(resizeTimeout);
+        resizeTimeout = setTimeout(() => {
+          const urlParams = new URLSearchParams(window.location.search);
+          const activeTab = urlParams.get('tab') || 'dashboard';
+          if (activeTab === 'dashboard') drawCharts();
+        }, 200);
+      });
+    });
+
+    // Helper for direct tab switches from UI elements
+    function switchToTab(tabId) {
+      const links = document.querySelectorAll('.sidebar-link');
+      links.forEach(l => {
+        if (l.getAttribute('data-id') === tabId) {
+          l.click();
+        }
+      });
+    }
+
+    function drawCharts() {
+      const salesData = [120, 240, 180, 310, 420, 390, 580];
+      const salesLabels = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+
+      const signupData = [450, 780, 620, 940, 1100, 850];
+      const signupLabels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'];
+
+      window.StacklyDashboard.renderLineChart('adminLineChart', salesData, salesLabels);
+      window.StacklyDashboard.renderBarChart('adminBarChart', signupData, signupLabels);
+    }
+
+    function populateNotifications() {
+      const db = window.StacklyDB;
+      const container = document.getElementById('admin-notif-list');
+      if (db && container) {
+        container.innerHTML = db.getNotifications().map(n => `
+          <div class="notification-item" onclick="switchToTab('notifications')">
+            <div class="notification-icon-wrapper" style="background: rgba(40,116,240,0.15); color: var(--primary);">
+              ⚡
+            </div>
+            <div class="notification-item-content">
+              <span class="notification-title">${n.title}</span>
+              <span class="notification-desc">${n.desc}</span>
+              <span class="notification-time">${n.time}</span>
+            </div>
+          </div>
+        `).join('');
+      }
+    }
+
+    function populateOrdersTable() {
+      const db = window.StacklyDB;
+      const body = document.getElementById('admin-orders-table-body');
+      if (db && body) {
+        body.innerHTML = db.getOrders().map(o => {
+          let statusBadge = 'badge-success';
+          if (o.status === 'Pending') statusBadge = 'badge-warning';
+          else if (o.status === 'Cancelled') statusBadge = 'badge-danger';
+
+          return `
+            <tr>
+              <td style="font-weight: 700; color: var(--primary);">${o.id}</td>
+              <td>${o.customer}</td>
+              <td>${o.date}</td>
+              <td>$${o.total.toFixed(2)}</td>
+              <td><span class="badge ${statusBadge}">${o.status}</span></td>
+              <td style="color: var(--text-secondary);">${o.items}</td>
+            </tr>
+          `;
+        }).join('');
+      }
+    }
+
+    /* ==================== USERS TAB FUNCTIONS ==================== */
+    function getUsers() {
+      return JSON.parse(localStorage.getItem('stackly_users')) || [];
+    }
+
+    function saveUsers(users) {
+      localStorage.setItem('stackly_users', JSON.stringify(users));
+    }
+
+    function renderUserTable() {
+      const users = getUsers();
+      const tbody = document.getElementById('user-accounts-table-body');
+      const search = document.getElementById('user-search-input').value.toLowerCase().trim();
+      
+      const customersCount = users.filter(u => u.role === 'customer').length;
+      const vendorsCount = users.filter(u => u.role === 'vendor').length;
+      const adminsCount = users.filter(u => u.role === 'admin').length;
+
+      document.getElementById('count-total').innerText = users.length;
+      document.getElementById('count-customers').innerText = customersCount;
+      document.getElementById('count-vendors').innerText = vendorsCount;
+      document.getElementById('count-admins').innerText = adminsCount;
+
+      document.getElementById('stat-total-users').innerText = `${(users.length / 10).toFixed(1)}k`;
+
+      let filteredUsers = users;
+      if (search) {
+        filteredUsers = users.filter(u => u.username.toLowerCase().includes(search) || u.email.toLowerCase().includes(search));
+      }
+
+      if (filteredUsers.length === 0) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="5" style="text-align: center; color: var(--text-muted); padding: 2rem;">No accounts match search query.</td>
+          </tr>
+        `;
+        return;
+      }
+
+      tbody.innerHTML = filteredUsers.map((u, index) => {
+        let badgeClass = 'badge-primary';
+        if (u.role === 'vendor') badgeClass = 'badge-secondary';
+        else if (u.role === 'admin') badgeClass = 'badge-danger';
+
+        const initial = u.username ? u.username[0].toUpperCase() : '?';
+
+        return `
+          <tr>
+            <td>
+              <div style="width: 38px; height: 38px; border-radius: 50%; background: var(--border-color); display: flex; align-items: center; justify-content: center; font-weight: 700; color: var(--primary);">
+                ${initial}
+              </div>
+            </td>
+            <td>
+              <span style="font-weight: 600;">${u.username}</span>
+            </td>
+            <td style="color: var(--text-secondary);">${u.email}</td>
+            <td>
+              <span class="badge ${badgeClass}">${u.role}</span>
+            </td>
+            <td style="text-align: right;">
+              <button class="btn btn-secondary" onclick="deleteUserHandler('${u.email}')" style="padding: 0.4rem 0.8rem; font-size: 0.8rem; border-color: var(--danger); color: var(--danger); border-radius: 6px;" ${u.email === 'admin@stackly.com' ? 'disabled style="opacity: 0.5; cursor: not-allowed;"' : ''}>
+                Delete
+              </button>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    function createUserHandler() {
+      const username = document.getElementById('reg-username').value.trim();
+      const email = document.getElementById('reg-email').value.trim().toLowerCase();
+      const password = document.getElementById('reg-password').value;
+      const role = document.getElementById('reg-role').value;
+
+      if (!username || !email || !password || !role) {
+        alert('All registration fields are required.');
+        return;
+      }
+
+      const users = getUsers();
+      if (users.find(u => u.email.toLowerCase() === email)) {
+        alert('An account with this email address already exists.');
+        return;
+      }
+
+      users.push({ username, email, password, role });
+      saveUsers(users);
+      
+      document.getElementById('admin-create-user-form').reset();
+      renderUserTable();
+      alert(`User ${username} created successfully as a ${role}.`);
+    }
+
+    function deleteUserHandler(email) {
+      if (email === 'admin@stackly.com') {
+        alert('Root Admin account cannot be decommissioned.');
+        return;
+      }
+
+      if (!confirm(`Are you sure you want to delete the user account: ${email}?`)) {
+        return;
+      }
+
+      let users = getUsers();
+      users = users.filter(u => u.email.toLowerCase() !== email.toLowerCase());
+      saveUsers(users);
+
+      const current = JSON.parse(localStorage.getItem('stackly_currentUser'));
+      if (current && current.email.toLowerCase() === email.toLowerCase()) {
+        localStorage.removeItem('stackly_currentUser');
+        window.location.href = '../index.html';
+        return;
+      }
+
+      renderUserTable();
+      alert('Account deleted successfully.');
+    }
+
+    /* ==================== VENDORS TAB FUNCTIONS ==================== */
+    function filterVendors() {
+      const db = window.StacklyDB;
+      const container = document.getElementById('vendors-cards-container');
+      if (!db || !container) return;
+
+      const searchInput = document.getElementById('vendor-search');
+      const searchVal = searchInput ? searchInput.value.toLowerCase().trim() : '';
+      const ratingVal = document.getElementById('vendor-rating-filter').value;
+
+      let vendors = db.getVendors();
+
+      if (searchVal) {
+        vendors = vendors.filter(v => v.name.toLowerCase().includes(searchVal));
+      }
+
+      if (ratingVal !== 'all') {
+        const threshold = parseFloat(ratingVal);
+        vendors = vendors.filter(v => v.rating >= threshold);
+      }
+
+      document.getElementById('stat-total-vendors').innerText = vendors.length;
+
+      if (vendors.length === 0) {
+        container.innerHTML = `
+          <div style="grid-column: 1/-1; text-align: center; padding: 4rem 0; color: var(--text-secondary);" class="glass glass-card">
+            <h3>No store merchants match your filter parameters.</h3>
+            <p>Try searching for a different keyword.</p>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = vendors.map(v => {
+        let tagline = "Premium products supplier.";
+        if (v.image === 'electronics') tagline = "Next-gen computers and telemetry gear.";
+        else if (v.image === 'fashion') tagline = "Cyber garments and clothing utilities.";
+        else if (v.image === 'home') tagline = "Futuristic furniture and home setups.";
+        else if (v.image === 'sports') tagline = "Outdoor instruments and bio-suits.";
+
+        return `
+          <div class="glass glass-card vendor-card">
+            <div class="vendor-logo-wrapper">
+              ${v.logo}
+            </div>
+            <div>
+              <h3 style="font-size: 1.35rem; font-family: var(--font-title); font-weight: 700; margin-bottom: 0.25rem;">${v.name}</h3>
+              <p style="color: var(--text-secondary); font-size: 0.9rem; line-height: 1.4;">${tagline}</p>
+            </div>
+            
+            <div class="vendor-info-row">
+              <div class="vendor-stat">
+                <span class="vendor-stat-val rating-stars">
+                  ${v.rating.toFixed(1)} ★
+                </span>
+                <span class="vendor-stat-lbl">Rating</span>
+              </div>
+              <div style="width: 1px; background: var(--border-color);"></div>
+              <div class="vendor-stat">
+                <span class="vendor-stat-val">${v.sales}</span>
+                <span class="vendor-stat-lbl">Sales</span>
+              </div>
+              <div style="width: 1px; background: var(--border-color);"></div>
+              <div class="vendor-stat">
+                <span class="vendor-stat-val">Verified</span>
+                <span class="vendor-stat-lbl">Status</span>
+              </div>
+            </div>
+
+            <button class="btn btn-secondary" onclick="suspendVendor('${v.name}')" style="width: 100%; margin-top: 0.5rem; border-color: var(--danger); color: var(--danger);">
+              Suspend Merchant
+            </button>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function suspendVendor(name) {
+      if (confirm(`Are you sure you want to temporarily suspend store merchant "${name}"?`)) {
+        alert(`Merchant "${name}" has been suspended! Dynamic catalog listings hidden.`);
+      }
+    }
+
+    /* ==================== PRODUCTS TAB FUNCTIONS ==================== */
+    function renderProductsTable() {
+      const db = window.StacklyDB;
+      const body = document.getElementById('global-products-table-body');
+      if (!db || !body) return;
+
+      const products = db.getProducts();
+
+      body.innerHTML = products.map(p => `
+        <tr>
+          <td>
+            <div style="display:flex; align-items:center; gap:0.75rem;">
+              <img src="${p.image}" style="width:36px; height:36px; border-radius:6px; object-fit:cover; border:1px solid var(--border-color);"/>
+              <div style="font-weight:700; color:var(--text-primary);">${p.name}</div>
+            </div>
+          </td>
+          <td style="text-transform: capitalize;">${p.category}</td>
+          <td style="font-weight:600;">$${p.price.toFixed(2)}</td>
+          <td>${p.vendor}</td>
+          <td style="color:#fbbf24; font-weight:700;">${p.rating.toFixed(1)} ★</td>
+          <td>
+            <button class="btn btn-secondary" onclick="deleteGlobalProduct('${p.id}')" style="padding:0.35rem 0.75rem; font-size:0.8rem; border-color:var(--danger); color:var(--danger); border-radius:6px;">Delete Listing</button>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    function deleteGlobalProduct(productId) {
+      const db = window.StacklyDB;
+      if (!db) return;
+      const product = db.getProducts().find(p => p.id === productId);
+      if (!product) return;
+
+      if (confirm(`Admin Action: Permanently delete listing "${product.name}"?`)) {
+        let all = db.getProducts();
+        all = all.filter(p => p.id !== productId);
+        db.saveProducts(all);
+        renderProductsTable();
+        alert('Listing decommissioned successfully!');
+      }
+    }
+
+    /* ==================== ORDERS TAB FUNCTIONS ==================== */
+    function populateOrdersLedger() {
+      const db = window.StacklyDB;
+      const body = document.getElementById('orders-ledger-table-body');
+      if (!db || !body) return;
+
+      const orders = db.getOrders();
+
+      body.innerHTML = orders.map(o => {
+        let statusBadge = 'badge-success';
+        if (o.status === 'Pending') statusBadge = 'badge-warning';
+        else if (o.status === 'Cancelled') statusBadge = 'badge-danger';
+
+        return `
+          <tr>
+            <td style="font-weight: 700; color: var(--secondary);">${o.id}</td>
+            <td>${o.customer}</td>
+            <td>${o.date}</td>
+            <td style="font-weight:600;">$${o.total.toFixed(2)}</td>
+            <td><span class="badge ${statusBadge}">${o.status}</span></td>
+            <td style="color:var(--text-secondary);">${o.items}</td>
+            <td>
+              <button onclick="toggleOrderStatus('${o.id}')" class="btn btn-secondary" style="padding: 0.3rem 0.6rem; font-size: 0.75rem;">Toggle Status</button>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    function toggleOrderStatus(orderId) {
+      const db = window.StacklyDB;
+      if (db) {
+        let orders = db.getOrders();
+        let order = orders.find(o => o.id === orderId);
+        if (order) {
+          order.status = order.status === 'Paid' ? 'Pending' : (order.status === 'Pending' ? 'Cancelled' : 'Paid');
+          db.saveOrders(orders);
+          populateOrdersLedger();
+        }
+      }
+    }
+
+    /* ==================== SETTINGS TAB FUNCTIONS ==================== */
+    function switchSettingsTab(tabId) {
+      document.querySelectorAll('.settings-nav-item').forEach(btn => btn.classList.remove('active'));
+      document.querySelectorAll('.settings-pane').forEach(pane => pane.classList.remove('active'));
+
+      document.getElementById(`nav-${tabId}`).classList.add('active');
+      document.getElementById(`pane-${tabId}`).classList.add('active');
+    }
+
+    function saveProfileHandler() {
+      const username = document.getElementById('set-username').value.trim();
+      const email = document.getElementById('set-email').value.trim().toLowerCase();
+      
+      if (!currentUser) return;
+
+      const users = JSON.parse(localStorage.getItem('stackly_users')) || [];
+      const userIndex = users.findIndex(u => u.email.toLowerCase() === currentUser.email.toLowerCase());
+
+      if (userIndex !== -1) {
+        users[userIndex].username = username;
+        users[userIndex].email = email;
+        localStorage.setItem('stackly_users', JSON.stringify(users));
+
+        currentUser.username = username;
+        currentUser.email = email;
+        localStorage.setItem('stackly_currentUser', JSON.stringify(currentUser));
+        
+        alert('Profile details updated successfully! Reloading...');
+        window.location.reload();
+      } else {
+        alert('Failed to update details: User record not found.');
+      }
+    }
+
+    function savePasswordHandler() {
+      const currPass = document.getElementById('set-curr-pass').value;
+      const newPass = document.getElementById('set-new-pass').value;
+
+      if (!currentUser) return;
+
+      const users = JSON.parse(localStorage.getItem('stackly_users')) || [];
+      const user = users.find(u => u.email.toLowerCase() === currentUser.email.toLowerCase());
+
+      if (user) {
+        if (user.password !== currPass) {
+          alert('Current password verification failed.');
+          return;
+        }
+
+        user.password = newPass;
+        localStorage.setItem('stackly_users', JSON.stringify(users));
+        
+        document.getElementById('settings-security-form').reset();
+        alert('Password updated successfully!');
+      }
+    }
+
+    function toggleSystemTheme() {
+      const themeBtn = document.querySelector('.theme-toggle-btn');
+      if (themeBtn) {
+        themeBtn.click();
+      } else {
+        const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+        const nextTheme = currentTheme === 'dark' ? 'light' : 'dark';
+        document.documentElement.setAttribute('data-theme', nextTheme);
+        localStorage.setItem('stackly_theme', nextTheme);
+      }
+    }
+
+    function savePreferences() {
+      const prefs = {
+        sounds: document.getElementById('pref-sounds').checked,
+        emails: document.getElementById('pref-email').checked
+      };
+      localStorage.setItem('stackly_preferences', JSON.stringify(prefs));
+    }
+
+    function loadPreferences() {
+      const prefs = JSON.parse(localStorage.getItem('stackly_preferences')) || { sounds: true, emails: true };
+      document.getElementById('pref-sounds').checked = prefs.sounds;
+      document.getElementById('pref-email').checked = prefs.emails;
+    }
+  </script>
+</body>
+</html>
