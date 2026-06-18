@@ -185,7 +185,7 @@
     .hero-carousel-container {
       position: relative;
       width: 100%;
-      height: 480px; /* Increased height to 480px for a more spacious, premium showcase */
+      height: 480px; /* Original 480px height for premium showcase */
       border-radius: var(--radius-md);
       overflow: hidden;
       border: 1px solid var(--border-color);
@@ -203,14 +203,16 @@
       width: 20%;
       height: 100%;
       display: flex;
-      flex-direction: row;
-      justify-content: space-between; /* Space out the content and specs visual columns */
-      align-items: center;
-      padding: 3rem 6rem;
+      flex-direction: column;
+      justify-content: center;
+      align-items: flex-start;
+      gap: 1.25rem; /* Spacing between stacked elements */
+      padding: 2rem 5rem; /* Adjusted padding to accommodate stacked layout */
       position: relative;
       overflow: hidden;
-      background-size: cover;
-      background-position: 42% center; /* Position background product image in the gap between the two glass panels */
+      background-repeat: no-repeat;
+      background-size: contain;
+      background-position: 92% center; /* Position background product image on the right side */
       transition: transform 0.5s ease;
     }
     
@@ -224,25 +226,42 @@
       pointer-events: none;
     }
 
+    .carousel-slide-left-container {
+      position: relative;
+      width: 100%;
+      max-width: 480px;
+      height: 335px; /* height to contain absolute children comfortably */
+      perspective: 1000px;
+      z-index: 5;
+    }
+
     .carousel-slide-content {
-      flex: 1.1;
-      max-width: 46%;
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      box-sizing: border-box;
       text-align: left;
       display: flex;
       flex-direction: column;
-      gap: 0.85rem;
+      gap: 0.5rem;
       align-items: flex-start;
+      justify-content: center;
       z-index: 5;
       background: rgba(8, 10, 20, 0.65) !important; /* Premium dark semi-transparent glass panel background */
       backdrop-filter: blur(14px);
       -webkit-backdrop-filter: blur(14px);
-      padding: 2.2rem;
+      padding: 1.5rem;
       border-radius: var(--radius-md);
       border: 1px solid rgba(255, 255, 255, 0.1);
       box-shadow: 0 15px 35px rgba(0, 0, 0, 0.35);
+      opacity: 0;
+      transform: translate3d(0, 30px, -50px) scale(0.95);
+      pointer-events: none;
     }
     .carousel-slide-title {
-      font-size: 2.8rem;
+      font-size: 2.2rem;
       font-weight: 800;
       font-family: var(--font-title);
       color: #ffffff !important;
@@ -250,7 +269,7 @@
       text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
     }
     .carousel-slide-desc {
-      font-size: 1.05rem;
+      font-size: 0.95rem;
       color: rgba(255, 255, 255, 0.85) !important;
       line-height: 1.5;
       text-shadow: 0 1px 5px rgba(0, 0, 0, 0.3);
@@ -275,51 +294,53 @@
     }
 
     .carousel-slide-specs-panel {
-      background: rgba(6, 8, 16, 0.93) !important; /* Darker, more opaque background to cover any image underneath */
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      background: rgba(8, 10, 20, 0.45) !important; /* Semi-transparent premium glass background to show the background image */
       border: 1px solid rgba(255, 255, 255, 0.15);
       border-radius: var(--radius-md);
-      padding: 2.2rem 2.6rem;
-      width: 100%;
-      max-width: 500px; /* Wider specs card for layout clarity */
+      padding: 1.25rem 1.5rem;
+      max-width: 480px; /* Matched specs card for layout alignment */
       backdrop-filter: blur(16px);
       -webkit-backdrop-filter: blur(16px);
       box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
       
       /* Slide-up active visual animation initialization */
       opacity: 0;
-      transform: translateY(40px) scale(0.95);
-      transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.4s ease;
+      transform: translate3d(20px, 20px, -60px) scale(0.88);
+      pointer-events: none;
     }
     .carousel-slide-specs-panel:hover {
       border-color: var(--secondary) !important;
     }
-    .hero-carousel-slide.active .carousel-slide-specs-panel {
-      opacity: 1;
-      transform: translateY(0) scale(1);
-      transition-delay: 0.4s;
-      animation: pulseGlow 3s infinite ease-in-out;
-    }
     .specs-panel-title {
       display: block;
-      font-size: 1.05rem;
+      font-size: 0.9rem;
       font-weight: 800;
       color: var(--secondary);
       letter-spacing: 0.15em;
-      margin-bottom: 1.25rem;
+      margin-bottom: 0.85rem;
       border-bottom: 1px solid rgba(255, 255, 255, 0.15);
-      padding-bottom: 0.55rem;
+      padding-bottom: 0.45rem;
       text-transform: uppercase;
     }
     .specs-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 1.25rem 1.5rem; /* Spacious grid layout */
+      gap: 0.75rem 1rem; /* Compact grid layout */
     }
     .spec-item {
       display: flex;
       flex-direction: column;
-      gap: 0.35rem;
-      padding: 0.75rem 1.1rem;
+      gap: 0.25rem;
+      padding: 0.5rem 0.75rem;
       background: rgba(255, 255, 255, 0.03);
       border: 1px solid rgba(255, 255, 255, 0.06);
       border-radius: var(--radius-sm);
@@ -339,20 +360,20 @@
       opacity: 1;
       transform: translateX(0) scale(1);
     }
-    .hero-carousel-slide.active .spec-item:nth-child(1) { transition-delay: 0.5s; }
-    .hero-carousel-slide.active .spec-item:nth-child(2) { transition-delay: 0.6s; }
-    .hero-carousel-slide.active .spec-item:nth-child(3) { transition-delay: 0.7s; }
-    .hero-carousel-slide.active .spec-item:nth-child(4) { transition-delay: 0.8s; }
-
+    .hero-carousel-slide.active .spec-item:nth-child(1) { transition-delay: 1.1s; }
+    .hero-carousel-slide.active .spec-item:nth-child(2) { transition-delay: 1.2s; }
+    .hero-carousel-slide.active .spec-item:nth-child(3) { transition-delay: 1.3s; }
+    .hero-carousel-slide.active .spec-item:nth-child(4) { transition-delay: 1.4s; }
+ 
     .spec-label {
-      font-size: 0.85rem;
+      font-size: 0.75rem;
       color: rgba(255, 255, 255, 0.6);
       text-transform: uppercase;
       font-weight: 700;
       letter-spacing: 0.05em;
     }
     .spec-value {
-      font-size: 1.1rem;
+      font-size: 0.95rem;
       color: #ffffff;
       font-weight: 600;
     }
@@ -841,55 +862,75 @@
     .hero-carousel-slide {
       transition: opacity 0.8s ease-in-out;
     }
-    
-    .carousel-slide-content {
-      opacity: 0;
-      transform: translateY(30px);
-      transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+
+    /* 3D Depth Card Swap Animations */
+    @keyframes contentCardFlip {
+      0% {
+        opacity: 0;
+        transform: translate3d(0, 30px, -50px) scale(0.95);
+        z-index: 10;
+        pointer-events: auto;
+      }
+      8%, 46% {
+        opacity: 1;
+        transform: translate3d(0, 0, 0) scale(1);
+        z-index: 10;
+        pointer-events: auto;
+      }
+      50%, 95% {
+        opacity: 0.35;
+        transform: translate3d(20px, -20px, -50px) scale(0.88);
+        z-index: 5;
+        pointer-events: none;
+      }
+      100% {
+        opacity: 0;
+        transform: translate3d(0, -30px, -100px) scale(0.85);
+        z-index: 5;
+        pointer-events: none;
+      }
     }
+
+    @keyframes specsCardFlip {
+      0%, 46% {
+        opacity: 0.35;
+        transform: translate3d(20px, 20px, -50px) scale(0.88);
+        z-index: 5;
+        pointer-events: none;
+      }
+      50%, 95% {
+        opacity: 1;
+        transform: translate3d(0, 0, 0) scale(1);
+        z-index: 10;
+        pointer-events: auto;
+      }
+      100% {
+        opacity: 0;
+        transform: translate3d(0, 0, 0) scale(0.95);
+        z-index: 10;
+        pointer-events: none;
+      }
+    }
+
     .hero-carousel-slide.active .carousel-slide-content {
-      opacity: 1;
-      transform: translateY(0);
-      transition-delay: 0.1s;
+      animation: contentCardFlip 2s forwards cubic-bezier(0.16, 1, 0.3, 1);
     }
-    
-    /* Elements fade/slide-up transition */
+
+    .hero-carousel-slide.active .carousel-slide-specs-panel {
+      animation: specsCardFlip 2s forwards cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    /* Ensure subelements are visible within the animated parent card */
     .hero-carousel-slide .carousel-slide-title,
     .hero-carousel-slide .carousel-slide-desc,
     .hero-carousel-slide .carousel-slide-content .btn,
     .hero-carousel-slide .carousel-slide-content .badge,
     .hero-carousel-slide .carousel-slide-content > div {
-      opacity: 0;
-      transform: translateY(20px);
-      transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-    
-    /* Staggered delays on active slide elements relative to the slide active trigger */
-    .hero-carousel-slide.active .carousel-slide-content .badge {
       opacity: 1;
-      transform: translateY(0);
-      transition-delay: 0.25s;
+      transform: none;
+      transition: none;
     }
-    .hero-carousel-slide.active .carousel-slide-title {
-      opacity: 1;
-      transform: translateY(0);
-      transition-delay: 0.35s;
-    }
-    .hero-carousel-slide.active .carousel-slide-desc {
-      opacity: 1;
-      transform: translateY(0);
-      transition-delay: 0.45s;
-    }
-    .hero-carousel-slide.active .carousel-slide-content > div {
-      opacity: 1;
-      transform: translateY(0);
-      transition-delay: 0.55s;
-    }
-    .hero-carousel-slide.active .carousel-slide-content .btn {
-      opacity: 1;
-      transform: translateY(0);
-      transition-delay: 0.65s;
-    }
+
     .hero-carousel-slide.active .carousel-slide-img {
       opacity: 1;
       transform: translateX(0) scale(1) rotate(0deg);
@@ -2308,20 +2349,20 @@
         const specs = carouselSpecs[p.id] || [];
         return `
           <div class="hero-carousel-slide slide-${idx + 1} ${idx === 0 ? 'active' : ''}" style="background-image: url('${bannerPath}');">
-            <div class="carousel-slide-content">
-              <span class="badge badge-danger" style="margin-bottom:0.25rem;">-${p.discount}% OFF</span>
-              <h2 class="carousel-slide-title">${p.name}</h2>
-              <p class="carousel-slide-desc">Exclusive marketplace offer starting ${startDateStr}. Stack your future goods at unbeatable deals.</p>
-              <div style="font-size:1.4rem; font-weight:800; color:var(--accent); margin-bottom:0.5rem; text-shadow: 0 1px 3px rgba(0,0,0,0.5);">
-                $${discountPrice.toFixed(2)}
-                <del style="font-size:1rem; color:rgba(255, 255, 255, 0.7); margin-left:0.5rem;">$${p.price.toFixed(2)}</del>
+            <div class="carousel-slide-left-container">
+              <div class="carousel-slide-content">
+                <span class="badge badge-danger" style="margin-bottom:0.25rem;">-${p.discount}% OFF</span>
+                <h2 class="carousel-slide-title">${p.name}</h2>
+                <p class="carousel-slide-desc">Exclusive marketplace offer starting ${startDateStr}. Stack your future goods at unbeatable deals.</p>
+                <div style="font-size:1.4rem; font-weight:800; color:var(--accent); margin-bottom:0.5rem; text-shadow: 0 1px 3px rgba(0,0,0,0.5);">
+                  $${discountPrice.toFixed(2)}
+                  <del style="font-size:1rem; color:rgba(255, 255, 255, 0.7); margin-left:0.5rem;">$${p.price.toFixed(2)}</del>
+                </div>
+                <button class="btn btn-primary" onclick="event.stopPropagation(); window.StacklyDB.addToCart(window.StacklyDB.getProducts().find(item => item.id === '${p.id}'), 1); alert('${p.name} added to cart!'); window.location.href='pages/customer-dashboard.html?tab=cart';" style="padding:0.6rem 1.5rem; font-size:0.9rem; box-shadow: 0 4px 15px rgba(0,0,0,0.45);">
+                  Claim Exclusive Offer
+                </button>
               </div>
-              <button class="btn btn-primary" onclick="event.stopPropagation(); window.StacklyDB.addToCart(window.StacklyDB.getProducts().find(item => item.id === '${p.id}'), 1); alert('${p.name} added to cart!'); window.location.href='pages/customer-dashboard.html?tab=cart';" style="padding:0.6rem 1.5rem; font-size:0.9rem; box-shadow: 0 4px 15px rgba(0,0,0,0.45);">
-                Claim Exclusive Offer
-              </button>
-            </div>
-            
-            <div class="carousel-slide-visual-column">
+              
               <div class="carousel-slide-specs-panel glass">
                 <span class="specs-panel-title">SPECIFICATIONS</span>
                 <div class="specs-grid">
@@ -2349,7 +2390,7 @@
       if (carouselInterval) clearInterval(carouselInterval);
       carouselInterval = setInterval(() => {
         moveCarousel(1);
-      }, 4000);
+      }, 2000);
     }
 
     function moveCarousel(direction) {
