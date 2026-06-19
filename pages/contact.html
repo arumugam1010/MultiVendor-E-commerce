@@ -269,15 +269,22 @@
 
           <!-- Forms -->
           <div class="glass glass-card" style="padding: 3rem;">
-            <form onsubmit="event.preventDefault(); alert('Transmission completed. Support logs generated.'); this.reset();">
-              <div class="grid grid-2" style="gap:1rem;">
+            <form id="contactForm">
+              <div class="grid grid-3" style="gap:1rem;">
                 <div class="form-group">
                   <label class="form-label">Client Name</label>
-                  <input class="form-input" type="text" required placeholder="John Doe">
+                  <input class="form-input" type="text" id="contactName" required placeholder="John Doe" pattern="^[A-Za-z\s]+$" title="Name should only contain alphabets and spaces.">
+                  <span class="error-message" id="nameError" style="color: var(--danger); font-size: 0.8rem; margin-top: 0.35rem; display: none;">Digits are not allowed in the Name field.</span>
                 </div>
                 <div class="form-group">
                   <label class="form-label">Client Email</label>
-                  <input class="form-input" type="email" required placeholder="john@doe.com">
+                  <input class="form-input" type="email" id="contactEmail" required placeholder="john@doe.com">
+                  <span class="error-message" id="emailError" style="color: var(--danger); font-size: 0.8rem; margin-top: 0.35rem; display: none;">Please enter a valid email address (e.g., name@domain.com).</span>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Mobile Number</label>
+                  <input class="form-input" type="tel" id="contactMobile" required placeholder="9876543210" pattern="^[0-9]+$" title="Mobile number should only contain digits.">
+                  <span class="error-message" id="mobileError" style="color: var(--danger); font-size: 0.8rem; margin-top: 0.35rem; display: none;">Alphabets are not allowed in the Mobile Number field.</span>
                 </div>
               </div>
               <div class="form-group">
@@ -430,6 +437,110 @@
         return "I have registered your signal. An agent at Salem Operations Center will review this shortly. Direct inbox: support@thestackly.com";
       }
     }
+
+    // Input validations: show validation errors dynamically and block characters
+    document.addEventListener('DOMContentLoaded', () => {
+      const nameInput = document.getElementById('contactName');
+      const emailInput = document.getElementById('contactEmail');
+      const mobileInput = document.getElementById('contactMobile');
+      const nameError = document.getElementById('nameError');
+      const emailError = document.getElementById('emailError');
+      const mobileError = document.getElementById('mobileError');
+      const contactForm = document.getElementById('contactForm');
+
+      let nameTimeout;
+      if (nameInput && nameError) {
+        nameInput.addEventListener('input', function() {
+          // Check if value contains any digit (0-9)
+          if (/\d/.test(this.value)) {
+            nameError.style.display = 'block';
+            // Strip the digits immediately
+            this.value = this.value.replace(/[0-9]/g, '');
+            
+            // Keep error visible for 2.5s
+            clearTimeout(nameTimeout);
+            nameTimeout = setTimeout(() => {
+              nameError.style.display = 'none';
+            }, 2500);
+          }
+        });
+      }
+
+      let mobileTimeout;
+      if (mobileInput && mobileError) {
+        mobileInput.addEventListener('input', function() {
+          // Check if value contains any alphabet (a-zA-Z)
+          if (/[a-zA-Z]/.test(this.value)) {
+            mobileError.style.display = 'block';
+            // Strip the alphabets immediately
+            this.value = this.value.replace(/[a-zA-Z]/g, '');
+            
+            // Keep error visible for 2.5s
+            clearTimeout(mobileTimeout);
+            mobileTimeout = setTimeout(() => {
+              mobileError.style.display = 'none';
+            }, 2500);
+          }
+        });
+      }
+
+      if (emailInput && emailError) {
+        const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+        
+        function validateEmail() {
+          const value = emailInput.value;
+          if (value === "") {
+            emailError.style.display = 'none';
+            return true;
+          }
+          // Only show validation error if length > 5 or includes '@'
+          if (value.length > 5 || value.includes('@')) {
+            if (!emailRegex.test(value)) {
+              emailError.style.display = 'block';
+              return false;
+            } else {
+              emailError.style.display = 'none';
+              return true;
+            }
+          }
+          emailError.style.display = 'none';
+          return true;
+        }
+
+        emailInput.addEventListener('input', validateEmail);
+        emailInput.addEventListener('blur', function() {
+          // On blur, if it's not empty, validate strictly
+          const value = this.value;
+          if (value !== "" && !emailRegex.test(value)) {
+            emailError.style.display = 'block';
+          } else {
+            emailError.style.display = 'none';
+          }
+        });
+      }
+
+      if (contactForm) {
+        contactForm.addEventListener('submit', function(event) {
+          event.preventDefault();
+          
+          // Double check email validation
+          if (emailInput && emailError) {
+            const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+            if (!emailRegex.test(emailInput.value)) {
+              emailError.style.display = 'block';
+              emailInput.focus();
+              return;
+            }
+          }
+          
+          alert('Transmission completed. Support logs generated.');
+          this.reset();
+          if (nameError) nameError.style.display = 'none';
+          if (emailError) emailError.style.display = 'none';
+          if (mobileError) mobileError.style.display = 'none';
+        });
+      }
+    });
   </script>
 
   <script src="../js/mockData.js"></script>
