@@ -481,7 +481,7 @@ class StacklyHeader extends HTMLElement {
           font-weight: 800;
           color: var(--text-primary);
         }
-        .navbar-brand span {
+        .navbar-brand .logo-highlight {
           background: var(--primary-gradient);
           -webkit-background-clip: text;
           -webkit-text-fill-color: transparent;
@@ -583,7 +583,7 @@ class StacklyHeader extends HTMLElement {
           font-weight: 800;
           color: var(--text-primary);
         }
-        .mobile-menu-brand span {
+        .mobile-menu-brand .logo-highlight {
           background: var(--primary-gradient);
           -webkit-background-clip: text;
           -webkit-text-fill-color: transparent;
@@ -644,14 +644,25 @@ class StacklyHeader extends HTMLElement {
           padding-bottom: 1.5rem;
         }
         .mobile-link {
+          font-family: var(--font-title);
           font-size: 1rem;
-          font-weight: 500;
+          font-weight: 400;
           color: inherit;
           padding: 0.8rem 1rem;
           border-radius: var(--radius-sm);
           transition: all var(--transition-fast);
           display: flex;
           align-items: center;
+          gap: 0.75rem;
+        }
+        .mobile-link svg {
+          width: 20px;
+          height: 20px;
+          flex-shrink: 0;
+          transition: transform var(--transition-fast);
+        }
+        .mobile-link:hover svg {
+          transform: scale(1.1);
         }
         .mobile-link:hover, .mobile-link.active {
           background: rgba(40, 116, 240, 0.08);
@@ -795,10 +806,7 @@ class StacklyHeader extends HTMLElement {
       </style>
       <nav class="navbar-wrapper">
         <div class="container navbar-container">
-          <a href="${base}index.html" class="navbar-brand">
-            ${STACKLY_LOGO_SVG(34)}
-            Stack<span>ly</span>
-          </a>
+          <a href="${base}index.html" class="navbar-brand">${STACKLY_LOGO_SVG(34)}<span>Stack<span class="logo-highlight">ly</span></span></a>
           
           <div class="navbar-links">
             <a href="${base}index.html" class="navbar-link" id="nav-home">Home</a>
@@ -835,10 +843,7 @@ class StacklyHeader extends HTMLElement {
       <!-- Mobile Navigation Drawer -->
       <div class="mobile-menu" id="navbarMobileMenu">
         <div class="mobile-menu-header">
-          <div class="mobile-menu-brand">
-            ${STACKLY_LOGO_SVG(34)}
-            Stack<span>ly</span>
-          </div>
+          <div class="mobile-menu-brand">${STACKLY_LOGO_SVG(34)}<span>Stack<span class="logo-highlight">ly</span></span></div>
           <button class="mobile-menu-close" id="navbarMobileMenuCloseBtn">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" style="width: 22px; height: 22px;"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
           </button>
@@ -847,13 +852,34 @@ class StacklyHeader extends HTMLElement {
         <!-- Search bar removed as per request -->
 
         <nav class="mobile-menu-links">
-          <a href="${base}index.html" class="mobile-link">Home</a>
-          <a href="${base}${pages}products.html" class="mobile-link">Products</a>
-          <a href="${base}${pages}categories.html" class="mobile-link">Categories</a>
-          <a href="${base}${pages}deals.html" class="mobile-link">Deals</a>
-          <a href="${base}${pages}services.html" class="mobile-link">Services</a>
-          <a href="${base}${pages}about.html" class="mobile-link">About Us</a>
-          <a href="${base}${pages}contact.html" class="mobile-link">Contact</a>
+          <a href="${base}index.html" class="mobile-link" id="mobile-nav-home">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+            <span>Home</span>
+          </a>
+          <a href="${base}${pages}products.html" class="mobile-link" id="mobile-nav-products">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/></svg>
+            <span>Products</span>
+          </a>
+          <a href="${base}${pages}categories.html" class="mobile-link" id="mobile-nav-categories">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/></svg>
+            <span>Categories</span>
+          </a>
+          <a href="${base}${pages}deals.html" class="mobile-link" id="mobile-nav-deals">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M7 7h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2zM9 16H9m3 0H12m3 0H15M9 12H9m3 0H12m3 0H15M9 8H9m3 0H12m3 0H15"/></svg>
+            <span>Deals</span>
+          </a>
+          <a href="${base}${pages}services.html" class="mobile-link" id="mobile-nav-services">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+            <span>Services</span>
+          </a>
+          <a href="${base}${pages}about.html" class="mobile-link" id="mobile-nav-about">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            <span>About Us</span>
+          </a>
+          <a href="${base}${pages}contact.html" class="mobile-link" id="mobile-nav-contact">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.94.725l.548 2.2a1 1 0 01-.321.988l-1.305.98a10.582 10.582 0 004.872 4.872l.98-1.305a1 1 0 01.988-.321l2.2.548a1 1 0 01.725.94V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
+            <span>Contact</span>
+          </a>
         </nav>
 
         <div class="mobile-menu-contact">
@@ -881,17 +907,19 @@ class StacklyHeader extends HTMLElement {
   highlightActivePage() {
     const path = window.location.pathname;
     let id = '';
-    if (path.endsWith('index.html') || path.endsWith('/')) id = 'nav-home';
-    else if (path.includes('products.html')) id = 'nav-products';
-    else if (path.includes('categories.html')) id = 'nav-categories';
-    else if (path.includes('deals.html')) id = 'nav-deals';
-    else if (path.includes('services.html')) id = 'nav-services';
-    else if (path.includes('about.html')) id = 'nav-about';
-    else if (path.includes('contact.html')) id = 'nav-contact';
+    if (path.endsWith('index.html') || path.endsWith('/')) id = 'home';
+    else if (path.includes('products.html')) id = 'products';
+    else if (path.includes('categories.html')) id = 'categories';
+    else if (path.includes('deals.html')) id = 'deals';
+    else if (path.includes('services.html')) id = 'services';
+    else if (path.includes('about.html')) id = 'about';
+    else if (path.includes('contact.html')) id = 'contact';
 
     if (id) {
-      const activeLink = this.querySelector(`#${id}`);
+      const activeLink = this.querySelector(`#nav-${id}`);
       if (activeLink) activeLink.classList.add('active');
+      const activeMobileLink = this.querySelector(`#mobile-nav-${id}`);
+      if (activeMobileLink) activeMobileLink.classList.add('active');
     }
   }
 
@@ -1281,10 +1309,7 @@ class StacklySidebar extends HTMLElement {
     this.innerHTML = `
       <aside class="sidebar" id="dashboardSidebar">
         <div class="sidebar-brand" style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
-          <a href="${base}index.html" style="display: flex; align-items: center; gap: 0.75rem; text-decoration: none; color: inherit; cursor: pointer;">
-            ${STACKLY_LOGO_SVG(36)}
-            <span style="font-family: var(--font-title); font-size: 1.5rem; font-weight: 800; color: var(--text-primary);">Stack<span style="background: var(--primary-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">ly</span></span>
-          </a>
+          <a href="${base}index.html" style="display: flex; align-items: center; gap: 0.5rem; text-decoration: none; color: inherit; cursor: pointer;">${STACKLY_LOGO_SVG(36)}<span style="font-family: var(--font-title); font-size: 1.5rem; font-weight: 800; color: var(--text-primary);">Stack<span style="background: var(--primary-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">ly</span></span></a>
           <button class="sidebar-close-btn" id="sidebarCloseBtn" style="background: none; border: none; color: var(--text-secondary); cursor: pointer; display: none; padding: 0.25rem;">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" style="width: 22px; height: 22px;"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
           </button>

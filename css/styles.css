@@ -149,11 +149,15 @@ body.no-scroll main {
 }
 
 /* Blur background when mobile drawer/sidebar is active */
-body > :not(stackly-header):not(stackly-sidebar):not(stackly-loader) {
+main,
+stackly-footer,
+.dashboard-wrapper .dashboard-main {
   transition: filter var(--transition-normal), opacity var(--transition-normal);
 }
 
-body.no-scroll > :not(stackly-header):not(stackly-sidebar):not(stackly-loader) {
+body.no-scroll main,
+body.no-scroll stackly-footer,
+body.no-scroll .dashboard-wrapper .dashboard-main {
   filter: blur(8px);
   opacity: 0.5;
   pointer-events: none;
