@@ -76,7 +76,11 @@ const StacklyDashboard = {
             
             // Close mobile drawer on link click
             const sidebarEl = document.getElementById('dashboardSidebar');
-            if (sidebarEl) sidebarEl.classList.remove('active');
+            if (sidebarEl) {
+              sidebarEl.classList.remove('active');
+              document.body.classList.remove('no-scroll');
+              document.documentElement.classList.remove('no-scroll');
+            }
           }
         });
       });
@@ -172,11 +176,22 @@ const StacklyDashboard = {
       sidebarToggle.dataset.bound = 'true';
       sidebarToggle.addEventListener('click', (e) => {
         e.stopPropagation();
-        sidebarElement.classList.toggle('active');
+        const isActive = sidebarElement.classList.toggle('active');
+        if (isActive) {
+          document.body.classList.add('no-scroll');
+          document.documentElement.classList.add('no-scroll');
+        } else {
+          document.body.classList.remove('no-scroll');
+          document.documentElement.classList.remove('no-scroll');
+        }
       });
       document.addEventListener('click', (e) => {
         if (!sidebarElement.contains(e.target) && !sidebarToggle.contains(e.target)) {
-          sidebarElement.classList.remove('active');
+          if (sidebarElement.classList.contains('active')) {
+            sidebarElement.classList.remove('active');
+            document.body.classList.remove('no-scroll');
+            document.documentElement.classList.remove('no-scroll');
+          }
         }
       });
     }

@@ -133,6 +133,32 @@ body {
   transition: background var(--transition-normal), color var(--transition-normal);
 }
 
+html.no-scroll,
+body.no-scroll {
+  overflow: hidden !important;
+  height: 100% !important;
+  position: fixed !important;
+  width: 100% !important;
+}
+
+body.no-scroll .dashboard-wrapper,
+body.no-scroll .dashboard-main,
+body.no-scroll main {
+  overflow: hidden !important;
+  height: 100vh !important;
+}
+
+/* Blur background when mobile drawer/sidebar is active */
+body > :not(stackly-header):not(stackly-sidebar):not(stackly-loader) {
+  transition: filter var(--transition-normal), opacity var(--transition-normal);
+}
+
+body.no-scroll > :not(stackly-header):not(stackly-sidebar):not(stackly-loader) {
+  filter: blur(8px);
+  opacity: 0.5;
+  pointer-events: none;
+}
+
 @keyframes float-bg-left {
   0% {
     transform: translate(0, 0) scale(1);

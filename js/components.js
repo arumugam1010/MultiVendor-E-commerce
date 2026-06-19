@@ -542,20 +542,153 @@ class StacklyHeader extends HTMLElement {
         }
         .mobile-menu {
           position: fixed;
-          top: 80px;
+          top: 0;
           left: 0;
-          width: 100%;
-          background: var(--bg-surface-opaque);
-          border-bottom: 1px solid var(--border-color);
-          padding: 1.5rem;
-          display: none;
+          width: 320px;
+          max-width: 85vw;
+          height: 100vh;
+          background: #ffffff;
+          box-shadow: 0 0 30px rgba(0, 0, 0, 0.15);
+          z-index: 9999;
+          display: flex;
           flex-direction: column;
-          gap: 1.25rem;
-          box-shadow: var(--card-shadow);
-          z-index: 999;
+          padding: 2rem 1.5rem;
+          gap: 1.5rem;
+          transform: translateX(-100%);
+          transition: transform var(--transition-normal);
+          overflow-y: auto;
+          color: #111111;
+          text-align: left;
+        }
+        [data-theme="dark"] .mobile-menu {
+          background: #111528;
+          color: #f3f4f6;
         }
         .mobile-menu.active {
+          transform: translateX(0);
+        }
+        .mobile-menu-header {
           display: flex;
+          justify-content: space-between;
+          align-items: center;
+          border-bottom: 1px solid var(--border-color);
+          padding-bottom: 1rem;
+        }
+        .mobile-menu-brand {
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
+          font-family: var(--font-title);
+          font-size: 1.5rem;
+          font-weight: 800;
+          color: var(--text-primary);
+        }
+        .mobile-menu-brand span {
+          background: var(--primary-gradient);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+        }
+        .mobile-menu-close {
+          background: none;
+          border: none;
+          color: var(--text-secondary);
+          cursor: pointer;
+          padding: 0.25rem;
+        }
+        .mobile-menu-search {
+          display: flex;
+          flex-direction: column;
+          gap: 0.5rem;
+          align-items: flex-start;
+        }
+        .mobile-menu-search h4 {
+          font-size: 1.1rem;
+          font-family: var(--font-title);
+          font-weight: 600;
+          color: inherit;
+        }
+        .mobile-search-box {
+          position: relative;
+          width: 100%;
+        }
+        .mobile-search-box input {
+          width: 100%;
+          padding: 0.75rem 3rem 0.75rem 1rem;
+          background: rgba(0, 0, 0, 0.03);
+          border: 1px solid var(--border-color);
+          border-radius: var(--radius-sm);
+          color: inherit;
+          font-size: 0.9rem;
+        }
+        [data-theme="dark"] .mobile-search-box input {
+          background: rgba(255, 255, 255, 0.03);
+        }
+        .mobile-search-box button {
+          position: absolute;
+          right: 0;
+          top: 0;
+          bottom: 0;
+          padding: 0 1rem;
+          background: none;
+          border: none;
+          color: var(--text-secondary);
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+        }
+        .mobile-menu-links {
+          display: flex;
+          flex-direction: column;
+          gap: 0.4rem;
+          border-bottom: 1px solid var(--border-color);
+          padding-bottom: 1.5rem;
+        }
+        .mobile-link {
+          font-size: 1rem;
+          font-weight: 500;
+          color: inherit;
+          padding: 0.8rem 1rem;
+          border-radius: var(--radius-sm);
+          transition: all var(--transition-fast);
+          display: flex;
+          align-items: center;
+        }
+        .mobile-link:hover, .mobile-link.active {
+          background: rgba(40, 116, 240, 0.08);
+          color: var(--primary);
+          padding-left: 1.25rem;
+        }
+        .mobile-menu-contact {
+          display: flex;
+          flex-direction: column;
+          gap: 0.85rem;
+          margin-top: auto;
+          padding-top: 1rem;
+          align-items: flex-start;
+        }
+        .mobile-menu-contact h3 {
+          font-size: 1.1rem;
+          font-family: var(--font-title);
+          font-weight: 700;
+          text-transform: uppercase;
+          letter-spacing: 0.05em;
+          color: var(--primary);
+        }
+        .contact-item {
+          display: flex;
+          flex-direction: column;
+          gap: 0.15rem;
+          align-items: flex-start;
+        }
+        .contact-label {
+          font-size: 0.75rem;
+          font-weight: 700;
+          color: var(--text-muted);
+          text-transform: uppercase;
+        }
+        .contact-value {
+          font-size: 0.9rem;
+          font-weight: 500;
         }
         @media (max-width: 992px) {
           .navbar-links {
@@ -701,13 +834,43 @@ class StacklyHeader extends HTMLElement {
 
       <!-- Mobile Navigation Drawer -->
       <div class="mobile-menu" id="navbarMobileMenu">
-        <a href="${base}index.html" class="navbar-link">Home</a>
-        <a href="${base}${pages}products.html" class="navbar-link">Products</a>
-        <a href="${base}${pages}categories.html" class="navbar-link">Categories</a>
-        <a href="${base}${pages}deals.html" class="navbar-link">Deals</a>
-        <a href="${base}${pages}services.html" class="navbar-link">Services</a>
-        <a href="${base}${pages}about.html" class="navbar-link">About</a>
-        <a href="${base}${pages}contact.html" class="navbar-link">Contact</a>
+        <div class="mobile-menu-header">
+          <div class="mobile-menu-brand">
+            ${STACKLY_LOGO_SVG(34)}
+            Stack<span>ly</span>
+          </div>
+          <button class="mobile-menu-close" id="navbarMobileMenuCloseBtn">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" style="width: 22px; height: 22px;"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+          </button>
+        </div>
+
+        <!-- Search bar removed as per request -->
+
+        <nav class="mobile-menu-links">
+          <a href="${base}index.html" class="mobile-link">Home</a>
+          <a href="${base}${pages}products.html" class="mobile-link">Products</a>
+          <a href="${base}${pages}categories.html" class="mobile-link">Categories</a>
+          <a href="${base}${pages}deals.html" class="mobile-link">Deals</a>
+          <a href="${base}${pages}services.html" class="mobile-link">Services</a>
+          <a href="${base}${pages}about.html" class="mobile-link">About Us</a>
+          <a href="${base}${pages}contact.html" class="mobile-link">Contact</a>
+        </nav>
+
+        <div class="mobile-menu-contact">
+          <h3>Contact Info</h3>
+          <div class="contact-item">
+            <span class="contact-label">Phone</span>
+            <span class="contact-value">+91 7010792745</span>
+          </div>
+          <div class="contact-item">
+            <span class="contact-label">Email</span>
+            <span class="contact-value">info@Stackly.com</span>
+          </div>
+          <div class="contact-item">
+            <span class="contact-label">Location</span>
+            <span class="contact-value">Stackly, salem</span>
+          </div>
+        </div>
       </div>
     `;
 
@@ -761,10 +924,39 @@ class StacklyHeader extends HTMLElement {
     const toggle = this.querySelector('#navbarMenuToggleBtn');
     const mobileMenu = this.querySelector('#navbarMobileMenu');
     if (toggle && mobileMenu) {
-      toggle.addEventListener('click', () => {
-        mobileMenu.classList.toggle('active');
+      toggle.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const isActive = mobileMenu.classList.toggle('active');
+        if (isActive) {
+          document.body.classList.add('no-scroll');
+          document.documentElement.classList.add('no-scroll');
+        } else {
+          document.body.classList.remove('no-scroll');
+          document.documentElement.classList.remove('no-scroll');
+        }
       });
     }
+
+    // Close mobile menu drawer on close button click
+    const closeBtn = this.querySelector('#navbarMobileMenuCloseBtn');
+    if (closeBtn && mobileMenu) {
+      closeBtn.addEventListener('click', () => {
+        mobileMenu.classList.remove('active');
+        document.body.classList.remove('no-scroll');
+        document.documentElement.classList.remove('no-scroll');
+      });
+    }
+
+    // Close mobile menu drawer on click outside
+    document.addEventListener('click', (e) => {
+      if (mobileMenu && mobileMenu.classList.contains('active')) {
+        if (!mobileMenu.contains(e.target) && toggle && !toggle.contains(e.target)) {
+          mobileMenu.classList.remove('active');
+          document.body.classList.remove('no-scroll');
+          document.documentElement.classList.remove('no-scroll');
+        }
+      }
+    });
 
     // Refresh count on custom cart triggers
     window.addEventListener('cartUpdated', () => this.refreshCounters());
@@ -806,7 +998,7 @@ class StacklyFooter extends HTMLElement {
         .footer-logo {
           display: flex;
           align-items: center;
-          gap: 0.5rem;
+          gap: 0;
           font-family: var(--font-title);
           font-size: 1.8rem;
           font-weight: 800;
@@ -916,10 +1108,7 @@ class StacklyFooter extends HTMLElement {
         <div class="container">
           <div class="footer-grid">
             <div class="footer-col">
-              <a href="${base}index.html" class="footer-logo">
-                ${STACKLY_LOGO_SVG(38)}
-                Stack<span>ly</span>
-              </a>
+              <a href="${base}index.html" class="footer-logo">${STACKLY_LOGO_SVG(38)}Stack<span>ly</span></a>
               <p class="footer-desc">
                 Stackly is a next-generation decentralized multi-vendor marketplace featuring high-performance design, neon glassmorphism aesthetics, and native performance.
               </p>
@@ -1130,6 +1319,8 @@ class StacklySidebar extends HTMLElement {
       closeBtn.addEventListener('click', () => {
         const sidebar = this.querySelector('#dashboardSidebar');
         if (sidebar) sidebar.classList.remove('active');
+        document.body.classList.remove('no-scroll');
+        document.documentElement.classList.remove('no-scroll');
       });
     }
   }
@@ -1303,6 +1494,10 @@ document.addEventListener('click', (event) => {
       button.classList.contains('carousel-control-btn') ||
       button.classList.contains('banner-slider-btn') ||
       button.id === 'sidebarMobileToggle' ||
+      button.id === 'sidebarCloseBtn' ||
+      button.id === 'navbarMobileMenuCloseBtn' ||
+      button.classList.contains('mobile-menu-close') ||
+      button.classList.contains('sidebar-close-btn') ||
       button.id === 'topbarNotifTrigger' ||
       button.id === 'navbarProfileTrigger' ||
       button.id === 'navbarMenuToggleBtn' ||
